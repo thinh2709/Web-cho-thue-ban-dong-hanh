@@ -1,0 +1,60 @@
+# Ghi chú lệnh Git (github-script)
+
+## Quy ước commit (Conventional Commits)
+
+Mỗi commit một dòng tiêu đề, dạng:
+
+  <loại>[phạm vi tùy chọn]: <mô tả ngắn, không chấm cuối>
+
+Loại thường dùng:
+  feat     — tính năng mới
+  fix      — sửa lỗi
+  docs     — chỉ tài liệu / ghi chú
+  style    — format, CSS, không đổi logic
+  refactor — tái cấu trúc, không đổi hành vi
+  chore    — cấu hình, scaffold, dependency, dọn dẹp
+  test     — thêm/sửa test
+
+Ví dụ:
+  feat(auth): thêm đăng nhập bằng email
+  fix(api): sửa lỗi CORS khi gọi từ frontend
+  chore: cập nhật dependencies
+  docs: bổ sung hướng dẫn chạy backend
+
+Nếu cần giải thích dài, sau dòng 1 để một dòng trống rồi viết body.
+
+---
+
+## Trạng thái & xem thay đổi
+git status
+git diff
+git diff --staged
+
+## Thêm file (staging)
+git add .
+git add <đường-dẫn-file>
+git add -p
+
+## Commit (theo quy ước trên)
+git commit -m "chore: mô tả ngắn gọn đúng loại"
+git commit -m "feat(ui): thêm form đăng ký"
+
+## Đẩy tiến trình lên remote
+git push origin main
+
+## Remote & đồng bộ
+git remote -v
+git pull origin main
+
+## Nhánh
+git branch
+git branch <tên-nhánh>
+git switch <tên-nhánh>
+git switch -c <tên-nhánh-mới>
+
+## Lịch sử
+git log --oneline -10
+
+## Hoàn tác (cẩn thận)
+git restore <file>
+git restore --staged <file>
