@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Website thuê bạn đồng hành</title>
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <aside class="sidebar">
+        <div class="sidebar__brand">💼</div>
+        <a class="nav-link" data-nav="profile" href="./companion-profile.html" title="Hồ sơ">👤</a>
+        <a class="nav-link" data-nav="earnings" href="./earnings.html" title="Thu nhập">💰</a>
+      </aside>
+      <main class="main">
+        <div class="container">
+          <h1 class="h1">Partner</h1>
+          <div class="card card--p24">
+            <div class="row">
+              <div>
+                <div style="font-weight: 700; font-size: 18px">Trang nhanh</div>
+                <div style="color: var(--muted); margin-top: 6px">Chọn màn hình bên trái để xem theo Figma.</div>
+              </div>
+              <form id="baseUrlForm" class="filters" autocomplete="off">
+                <input class="input" id="baseUrl" placeholder="http://localhost:4000" style="width: 240px" />
+                <button class="btn btn-primary" type="submit">Lưu API</button>
+              </form>
+            </div>
+            <div style="margin-top: 16px; color: rgba(255, 255, 255, 0.9)" data-status></div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script type="module">
+      import { getBaseUrl } from "./js/api.js";
+      import { setStatus } from "./js/app.js";
+
+      const input = document.getElementById("baseUrl");
+      input.value = getBaseUrl();
+
+      document.getElementById("baseUrlForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        localStorage.setItem("BASE_URL", input.value.trim());
+        setStatus("Đã lưu BASE_URL. Mở Hồ sơ/Thu nhập để gọi API.", "success");
+      });
+    </script>
+  </body>
+</html>
