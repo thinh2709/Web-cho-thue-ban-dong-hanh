@@ -7,27 +7,15 @@ dotenv.config();
 
 const app = express();
 
-// Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// Routes
+// API Routes
 app.use('/api', apiRoutes);
 
-// Health check
+// Basic health check
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date() });
-});
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
-  res.status(statusCode);
-  res.json({
-    message: err.message,
-    stack: process.env.NODE_ENV === 'production' ? null : err.stack,
-  });
+  res.status(200).send('OK');
 });
 
 export default app;
