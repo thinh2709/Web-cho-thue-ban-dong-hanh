@@ -1,73 +1,32 @@
-(function () {
-  const DEFAULT_BASE_URL = "http://localhost:5000";
-  const API_BASE = String(window.API_BASE || DEFAULT_BASE_URL).replace(/\/+$/, "");
+const DEFAULT_BASE_URL = "http://localhost:4000";
 
-  function getToken() {
-    return localStorage.getItem("token") || sessionStorage.getItem("token") || "";
+export function getBaseUrl() {
+  const url = localStorage.getItem("BASE_URL");
+  return url && url.trim() ? url.trim() : DEFAULT_BASE_URL;
+}
+
+export async function apiFetch(path, options = {}) {
+  const baseUrl = getBaseUrl();
+  const response = await fetch(`${baseUrl}${path}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      "x-user-id": "demo-user",
+      ...(options.headers || {}),
+    },
+  });
+
+  const text = await response.text();
+  const body = text ? JSON.parse(text) : null;
+
+  if (!response.ok) {
+    const message = body?.message || `Request failed (${response.status})`;
+    throw new Error(message);
   }
 
-  function setToken(token, remember) {
-    localStorage.removeItem("token");
-    sessionStorage.removeItem("token");
+  return body;
+}
 
-    if (!token) return;
-
-    if (remember) {
-      localStorage.setItem("token", token);
-    } else {
-      sessionStorage.setItem("token", token);
-    }
-  }
-
-  function clearToken() {
-    localStorage.removeItem("token");
-    sessionStorage.removeItem("token");
-  }
-
-  async function request(path, options) {
-    const method = options?.method || "GET";
-    const body = options?.body;
-    const token = options?.token;
-
-    const headers = {};
-    if (body !== undefined) headers["Content-Type"] = "application/json";
-    if (token) headers.Authorization = `Bearer ${token}`;
-
-    const res = await fetch(`${API_BASE}${path}`, {
-      method,
-      headers,
-      body: body !== undefined ? JSON.stringify(body) : undefined,
-    });
-
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) {
-      throw new Error(data?.message || "Request failed");
-    }
-
-    return data;
-  }
-
-  async function login({ email, password }) {
-    return request("/api/auth/login", { method: "POST", body: { email, password } });
-  }
-
-  async function register({ name, email, password }) {
-    return request("/api/auth/register", { method: "POST", body: { name, email, password } });
-  }
-
-  async function me() {
-    const token = getToken();
-    return request("/api/auth/me", { token });
-  }
-
-  window.api = {
-    API_BASE,
-    request,
-    login,
-    register,
-    me,
-    getToken,
-    setToken,
-    clearToken,
-  };
-})();
+export function formatCurrencyVND(amount) {
+  return new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(amount || 0);
+}

@@ -1,15 +1,22 @@
-import "dotenv/config";
+import dotenv from "dotenv";
 
-import { createApp } from "./app.js";
+import createApp from "./app.js";
 import { connectDatabase } from "./config/database.js";
+import { createStorage } from "./storage/index.js";
 
-const port = process.env.PORT ? Number(process.env.PORT) : 5000;
+dotenv.config();
+
+const port = process.env.PORT ? Number(process.env.PORT) : 4000;
 const mongoUri = process.env.MONGODB_URI;
 
-await connectDatabase({ mongoUri });
+const db = await connectDatabase({ mongoUri });
+if (!db.connected) {
+  console.warn(`MongoDB disabled: ${db.error}`);
+}
 
-const app = createApp();
+const storage = createStorage({ mongoConnected: db.connected });
+const app = createApp({ storage });
 
 app.listen(port, () => {
-  process.stdout.write(`Backend listening on http://localhost:${port}\n`);
+  console.log(`Backend listening on http://localhost:${port}`);
 });

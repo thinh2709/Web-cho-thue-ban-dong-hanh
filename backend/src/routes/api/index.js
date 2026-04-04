@@ -1,9 +1,9 @@
 import { Router } from "express";
 
-import authRoutes from "./auth.js";
+import companionsRoutes from "./companions.js";
 
 const router = Router();
 
-router.use("/auth", authRoutes);
+router.use("/companions", companionsRoutes);
 
 export default router;

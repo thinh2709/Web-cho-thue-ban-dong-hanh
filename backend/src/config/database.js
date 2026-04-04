@@ -1,11 +1,15 @@
 import mongoose from "mongoose";
 
 export async function connectDatabase({ mongoUri }) {
+  mongoose.set("strictQuery", true);
   if (!mongoUri) {
-    throw new Error("Missing MONGODB_URI");
+    return { connected: false, connection: null, error: "Missing MONGODB_URI" };
   }
 
-  mongoose.set("strictQuery", true);
-
-  await mongoose.connect(mongoUri);
+  try {
+    await mongoose.connect(mongoUri, { serverSelectionTimeoutMS: 3000 });
+    return { connected: true, connection: mongoose.connection, error: null };
+  } catch (e) {
+    return { connected: false, connection: null, error: e?.message || String(e) };
+  }
 }

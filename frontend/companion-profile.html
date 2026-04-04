@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quản lý hồ sơ</title>
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <aside class="sidebar">
+        <div class="sidebar__brand">💼</div>
+        <a class="nav-link" data-nav="profile" href="./companion-profile.html" title="Hồ sơ">👤</a>
+        <a class="nav-link" data-nav="calendar" href="./companion-profile.html" title="Lịch">🗓️</a>
+        <a class="nav-link" data-nav="requests" href="./companion-profile.html" title="Yêu cầu">📬</a>
+        <a class="nav-link" data-nav="earnings" href="./earnings.html" title="Thu nhập">💰</a>
+        <div style="flex: 1"></div>
+        <div class="sidebar__brand">💬</div>
+      </aside>
+      <main class="main">
+        <div class="container">
+          <h1 class="h1">👤 Quản lý hồ sơ</h1>
+
+          <div class="grid-profile">
+            <section class="card profile-card">
+              <div class="avatar" id="avatar">👩</div>
+              <p class="profile-name" id="profileName">—</p>
+              <div id="verifiedBadge"></div>
+
+              <div class="stats">
+                <div><strong id="reviewCount">0</strong>Đánh giá</div>
+                <div><strong id="rating">0</strong>Điểm</div>
+                <div><strong id="appointments">0</strong>Cuộc hẹn</div>
+              </div>
+
+              <div class="nav-list">
+                <div class="nav-item"><span>Thông tin cá nhân</span><span>›</span></div>
+                <div class="nav-item"><span>Sở thích</span><span>›</span></div>
+                <div class="nav-item"><span>Thư viện ảnh</span><span>›</span></div>
+              </div>
+            </section>
+
+            <section class="card">
+              <div class="card-header">
+                <h2 class="card-title">Thông tin cá nhân</h2>
+                <button class="btn btn-primary" id="saveTop" type="button">✏️ Chỉnh sửa</button>
+              </div>
+
+              <form class="form" id="profileForm" autocomplete="off">
+                <div class="field">
+                  <div class="label">Họ và tên</div>
+                  <input class="input" name="fullName" placeholder="Nguyễn Thị Lan" />
+                </div>
+                <div class="field">
+                  <div class="label">Ngày sinh</div>
+                  <input class="input" name="birthDate" type="date" />
+                </div>
+                <div class="field">
+                  <div class="label">Số điện thoại</div>
+                  <input class="input" name="phoneNumber" placeholder="0xxx xxx xxx" />
+                </div>
+                <div class="field">
+                  <div class="label">Địa chỉ</div>
+                  <input class="input" name="address" placeholder="Nhập địa chỉ" />
+                </div>
+                <div class="field field--full">
+                  <div class="label">Giới thiệu</div>
+                  <textarea class="textarea" name="bio" placeholder="Giới thiệu ngắn về bạn..."></textarea>
+                </div>
+                <div class="field field--full">
+                  <div class="label">Sở thích</div>
+                  <input class="input" name="hobbies" placeholder="VD: Đi dạo, cà phê, đọc sách" />
+                  <div class="hint">Nhập nhiều sở thích, phân tách bằng dấu phẩy.</div>
+                </div>
+                <div class="field field--full">
+                  <div class="label">Thư viện ảnh</div>
+                  <div class="gallery">
+                    <div class="gallery__cell"></div>
+                    <div class="gallery__cell"></div>
+                    <div class="gallery__cell"></div>
+                    <div class="gallery__cell"></div>
+                  </div>
+                </div>
+
+                <div class="field field--full" style="display: flex; align-items: center; gap: 12px">
+                  <button class="btn btn-primary" type="submit">Lưu thay đổi</button>
+                  <div data-status class="muted"></div>
+                </div>
+              </form>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script type="module">
+      import { apiFetch } from "./js/api.js";
+      import { setActiveNav, setStatus } from "./js/app.js";
+
+      setActiveNav("profile");
+
+      const form = document.getElementById("profileForm");
+      const saveTop = document.getElementById("saveTop");
+
+      function toInputDate(dateValue) {
+        if (!dateValue) return "";
+        const d = new Date(dateValue);
+        if (Number.isNaN(d.getTime())) return "";
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, "0");
+        const dd = String(d.getDate()).padStart(2, "0");
+        return `${yyyy}-${mm}-${dd}`;
+      }
+
+      function setProfile(profile) {
+        document.getElementById("profileName").textContent = profile.fullName || "—";
+        document.getElementById("reviewCount").textContent = profile.reviewCount ?? 0;
+        document.getElementById("rating").textContent = profile.rating ?? 0;
+        document.getElementById("appointments").textContent = profile.completedAppointments ?? 0;
+        document.getElementById("verifiedBadge").innerHTML = profile.isVerified ? '<span class="badge">✓ Đã xác thực</span>' : "";
+
+        form.fullName.value = profile.fullName || "";
+        form.birthDate.value = toInputDate(profile.birthDate);
+        form.phoneNumber.value = profile.phoneNumber || "";
+        form.address.value = profile.address || "";
+        form.bio.value = profile.bio || "";
+        form.hobbies.value = Array.isArray(profile.hobbies) ? profile.hobbies.join(", ") : "";
+      }
+
+      async function load() {
+        try {
+          setStatus("Đang tải hồ sơ...");
+          const res = await apiFetch("/api/companions/me");
+          setProfile(res.data);
+          setStatus("");
+        } catch (e) {
+          setStatus(e.message, "error");
+        }
+      }
+
+      saveTop.addEventListener("click", () => {
+        form.querySelector("[name='fullName']").focus();
+      });
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        try {
+          setStatus("Đang lưu...");
+          const payload = {
+            fullName: form.fullName.value.trim(),
+            birthDate: form.birthDate.value ? new Date(form.birthDate.value).toISOString() : null,
+            phoneNumber: form.phoneNumber.value.trim(),
+            address: form.address.value.trim(),
+            bio: form.bio.value.trim(),
+            hobbies: form.hobbies.value
+              .split(",")
+              .map((s) => s.trim())
+              .filter(Boolean),
+          };
+          if (!payload.birthDate) delete payload.birthDate;
+          const res = await apiFetch("/api/companions/me", { method: "PATCH", body: JSON.stringify(payload) });
+          setProfile(res.data);
+          setStatus("Đã lưu thay đổi.", "success");
+        } catch (e) {
+          setStatus(e.message, "error");
+        }
+      });
+
+      load();
+    </script>
+  </body>
+</html>
+
