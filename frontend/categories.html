@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý danh mục - Website thuê bạn đồng hành</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; display: flex; background: #f4f7f6; }
+        .sidebar { width: 250px; background: #2c3e50; color: white; min-height: 100vh; padding: 20px; }
+        .sidebar h2 { font-size: 1.2rem; margin-bottom: 30px; }
+        .sidebar ul { list-style: none; padding: 0; }
+        .sidebar li { padding: 12px; cursor: pointer; border-radius: 4px; transition: 0.3s; }
+        .sidebar li:hover { background: #34495e; }
+        .sidebar li.active { background: #3498db; }
+        .sidebar a { color: white; text-decoration: none; display: block; }
+        
+        .main-content { flex: 1; padding: 30px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .btn { padding: 10px 20px; border-radius: 4px; cursor: pointer; border: none; font-weight: bold; }
+        .btn-primary { background: #3498db; color: white; }
+        .btn-danger { background: #e74c3c; color: white; }
+        
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; color: #666; font-weight: 600; }
+        
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 30px; border-radius: 8px; width: 400px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #666; }
+        .form-group input, .form-group textarea { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>ADMIN PANEL</h2>
+        <ul>
+            <li class="active"><a href="categories.html"><i class="fas fa-folder"></i> Danh mục</a></li>
+            <li><a href="partner-applications.html"><i class="fas fa-user-tie"></i> Đơn đăng ký Partner</a></li>
+            <li><a href="index.html"><i class="fas fa-home"></i> Quay lại Home</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h1>📁 Quản lý danh mục</h1>
+            <button class="btn btn-primary" onclick="showAddModal()">+ Thêm danh mục mới</button>
+        </div>
+
+        <table id="categoryTable">
+            <thead>
+                <tr>
+                    <th>Tên danh mục</th>
+                    <th>Mô tả</th>
+                    <th>Trạng thái</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody id="categoryBody">
+                <!-- Data will be loaded here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div id="categoryModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Thêm danh mục</h2>
+            <form id="categoryForm">
+                <input type="hidden" id="categoryId">
+                <div class="form-group">
+                    <label>Tên danh mục</label>
+                    <input type="text" id="categoryName" required>
+                </div>
+                <div class="form-group">
+                    <label>Mô tả</label>
+                    <textarea id="categoryDescription"></textarea>
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button type="button" class="btn" onclick="hideModal()">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import api from './js/api.js';
+
+        const categoryBody = document.getElementById('categoryBody');
+        const modal = document.getElementById('categoryModal');
+        const form = document.getElementById('categoryForm');
+
+        async function loadCategories() {
+            const categories = await api.getCategories();
+            categoryBody.innerHTML = categories.map(cat => `
+                <tr>
+                    <td><strong>${cat.name}</strong></td>
+                    <td>${cat.description || ''}</td>
+                    <td><span style="color: ${cat.isActive ? 'green' : 'red'}">${cat.isActive ? 'Hoạt động' : 'Tạm khóa'}</span></td>
+                    <td>
+                        <button class="btn" style="background: #f1c40f; color: white;" onclick="window.editCategory('${cat._id}')"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger" onclick="window.deleteCategory('${cat._id}')"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        window.showAddModal = () => {
+            document.getElementById('modalTitle').innerText = 'Thêm danh mục';
+            form.reset();
+            document.getElementById('categoryId').value = '';
+            modal.style.display = 'flex';
+        };
+
+        window.hideModal = () => {
+            modal.style.display = 'none';
+        };
+
+        window.editCategory = async (id) => {
+            const cat = await api.getCategory(id);
+            document.getElementById('modalTitle').innerText = 'Sửa danh mục';
+            document.getElementById('categoryId').value = cat._id;
+            document.getElementById('categoryName').value = cat.name;
+            document.getElementById('categoryDescription').value = cat.description;
+            modal.style.display = 'flex';
+        };
+
+        window.deleteCategory = async (id) => {
+            if (confirm('Bạn có chắc chắn muốn xóa danh mục này?')) {
+                await api.deleteCategory(id);
+                loadCategories();
+            }
+        };
+
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('categoryId').value;
+            const data = {
+                name: document.getElementById('categoryName').value,
+                description: document.getElementById('categoryDescription').value,
+            };
+
+            if (id) {
+                await api.updateCategory(id, data);
+            } else {
+                await api.createCategory(data);
+            }
+            hideModal();
+            loadCategories();
+        };
+
+        loadCategories();
+    </script>
+</body>
+</html>
