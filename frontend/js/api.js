@@ -1,52 +1,38 @@
-const BASE_URL = 'http://localhost:5000/api';
+const STORAGE_KEY = "thueBanDongHanhUserId";
 
-const api = {
-  // Booking API calls
-  async createBooking(bookingData) {
-    try {
-      const response = await fetch(`${BASE_URL}/bookings`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(bookingData),
-      });
-      return await response.json();
-    } catch (error) {
-      console.error('Error creating booking:', error);
-      throw error;
-    }
-  },
+export const API_BASE =
+  window.__API_BASE__ ?? `${window.location.protocol}//${window.location.hostname}:3000`;
 
-  async getBookings(userId, status) {
-    try {
-      let url = `${BASE_URL}/bookings`;
-      const params = new URLSearchParams();
-      if (userId) params.append('userId', userId);
-      if (status) params.append('status', status);
-      if (params.toString()) url += `?${params.toString()}`;
+export function getStoredUserId() {
+  return localStorage.getItem(STORAGE_KEY);
+}
 
-      const response = await fetch(url);
-      return await response.json();
-    } catch (error) {
-      console.error('Error fetching bookings:', error);
-      throw error;
-    }
-  },
+export function setStoredUserId(id) {
+  if (id) localStorage.setItem(STORAGE_KEY, id);
+  else localStorage.removeItem(STORAGE_KEY);
+}
 
-  async updateBookingStatus(id, status) {
-    try {
-      const response = await fetch(`${BASE_URL}/bookings/${id}/status`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status }),
-      });
-      return await response.json();
-    } catch (error) {
-      console.error('Error updating booking status:', error);
-      throw error;
-    }
-  }
-};
+function headers(extra = {}) {
+  const h = { "Content-Type": "application/json", ...extra };
+  const uid = getStoredUserId();
+  if (uid) h["X-User-Id"] = uid;
+  return h;
+}
+
+export async function apiGet(path) {
+  const res = await fetch(`${API_BASE}${path}`, { headers: headers() });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.message || res.statusText);
+  return data;
+}
+
+export async function apiPatch(path, body) {
+  const res = await fetch(`${API_BASE}${path}`, {
+    method: "PATCH",
+    headers: headers(),
+    body: JSON.stringify(body ?? {}),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.message || res.statusText);
+  return data;
+}

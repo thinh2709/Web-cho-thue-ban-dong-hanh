@@ -1,66 +1,221 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website Thuê Bạn Đồng Hành - Frontend Test</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-            background: #F4F7FE;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .container {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            text-align: center;
-            max-width: 500px;
-        }
-        h1 {
-            color: #1A1A2E;
-            font-weight: 800;
-            margin-bottom: 30px;
-        }
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 15px;
-            background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
-            color: white;
-            text-decoration: none;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 18px;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-        .btn.outline {
-            background: transparent;
-            border: 2px solid #667EEA;
-            color: #667EEA;
-            box-sizing: border-box;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>👋 Xin chào!</h1>
-        <p style="color: #666; margin-bottom: 30px; line-height: 1.6;">Bạn đang chạy hệ thống Frontend bằng Go Live (Live Server). Vui lòng chọn trang giao diện mà bạn muốn mở để kiểm thử:</p>
-        
-        <a href="booking.html" class="btn">🚀 Trang Đặt Lịch (Booking)</a>
-        <a href="appointments.html" class="btn outline">📅 Quản Lý Lịch Hẹn</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Booking — Tìm bạn đồng hành</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body class="page-discover">
+    <div class="discover-page">
+      <img
+        class="discover-page__bg"
+        src="/assets/99790%201%20%281%29.png"
+        alt=""
+        decoding="async"
+        fetchpriority="high"
+      />
+      <aside class="discover-sidebar" aria-label="Điều hướng">
+        <a class="discover-sidebar__brand" href="/" title="Trang chủ">🌸</a>
+        <nav class="discover-sidebar__nav" aria-label="Chính">
+          <a class="discover-sidebar__item discover-sidebar__item--active" href="/" aria-current="page">
+            <span class="discover-sidebar__icon" aria-hidden="true">📘</span>
+            <span class="discover-sidebar__label">Booking</span>
+          </a>
+          <a class="discover-sidebar__item" href="/#discover-search">
+            <span class="discover-sidebar__icon" aria-hidden="true">🔍</span>
+            <span class="discover-sidebar__label">Tìm kiếm</span>
+          </a>
+          <a class="discover-sidebar__item" href="/my-bookings.html">
+            <span class="discover-sidebar__icon" aria-hidden="true">📅</span>
+            <span class="discover-sidebar__label">Lịch hẹn</span>
+          </a>
+          <a class="discover-sidebar__item" href="#" title="Sắp có">
+            <span class="discover-sidebar__icon" aria-hidden="true">❤️</span>
+            <span class="discover-sidebar__label">Yêu thích</span>
+          </a>
+          <a class="discover-sidebar__item" href="#" title="Sắp có">
+            <span class="discover-sidebar__icon" aria-hidden="true">⭐</span>
+            <span class="discover-sidebar__label">Đánh giá</span>
+          </a>
+          <a class="discover-sidebar__item" href="#" title="Sắp có">
+            <span class="discover-sidebar__icon" aria-hidden="true">📢</span>
+            <span class="discover-sidebar__label">Báo cáo</span>
+          </a>
+        </nav>
+      </aside>
+
+      <main class="discover-main">
+        <header class="discover-header">
+          <div class="discover-header__brand">
+            <span class="discover-header__logo" aria-hidden="true">📘</span>
+            <span class="discover-header__title">Booking</span>
+          </div>
+          <a class="discover-header__profile" href="/profile.html" title="Hồ sơ">👤</a>
+        </header>
+
+        <form id="discover-search" class="discover-panel" action="/" method="get" role="search">
+          <div class="discover-search-row">
+            <label class="visually-hidden" for="discover-q">Tìm kiếm</label>
+            <input
+              id="discover-q"
+              class="discover-search-row__input"
+              type="search"
+              name="q"
+              placeholder="Tìm kiếm bạn đồng hành..."
+              autocomplete="off"
+            />
+            <button class="discover-search-row__btn" type="submit">🔍 Tìm kiếm</button>
+          </div>
+          <div class="discover-filters">
+            <label class="discover-filter">
+              <span class="discover-filter__label">📍 Vị trí</span>
+              <select class="discover-filter__control" name="location">
+                <option>Tất cả</option>
+                <option>Hà Nội</option>
+                <option>TP. HCM</option>
+                <option>Đà Nẵng</option>
+              </select>
+            </label>
+            <label class="discover-filter">
+              <span class="discover-filter__label">💝 Sở thích</span>
+              <select class="discover-filter__control" name="hobby">
+                <option>Tất cả</option>
+                <option>Du lịch</option>
+                <option>Ẩm thực</option>
+                <option>Thể thao</option>
+              </select>
+            </label>
+            <label class="discover-filter">
+              <span class="discover-filter__label">👤 Giới tính</span>
+              <select class="discover-filter__control" name="gender">
+                <option>Tất cả</option>
+                <option>Nam</option>
+                <option>Nữ</option>
+              </select>
+            </label>
+            <label class="discover-filter">
+              <span class="discover-filter__label">🎂 Độ tuổi</span>
+              <select class="discover-filter__control" name="age">
+                <option>Tất cả</option>
+                <option>18–25</option>
+                <option>26–35</option>
+                <option>36+</option>
+              </select>
+            </label>
+            <label class="discover-filter">
+              <span class="discover-filter__label">💰 Mức giá</span>
+              <select class="discover-filter__control" name="price">
+                <option>Tất cả</option>
+                <option>Dưới 500k/h</option>
+                <option>500k–700k/h</option>
+                <option>Trên 700k/h</option>
+              </select>
+            </label>
+          </div>
+        </form>
+
+        <div class="discover-toolbar">
+          <p class="discover-toolbar__count">Tìm thấy <strong>24</strong> bạn đồng hành</p>
+          <div class="discover-sort">
+            <label class="discover-sort__label" for="discover-sort-select">Sắp xếp:</label>
+            <select id="discover-sort-select" class="discover-sort__select" aria-label="Sắp xếp kết quả">
+              <option>Phổ biến nhất</option>
+              <option>Giá thấp đến cao</option>
+              <option>Đánh giá cao nhất</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="discover-grid" role="list">
+          <article class="companion-card" role="listitem">
+            <div class="companion-card__media">
+              <span class="companion-card__avatar" aria-hidden="true">👩</span>
+              <span class="companion-card__badge companion-card__badge--online">🟢 Online</span>
+              <button type="button" class="companion-card__fav" aria-label="Thêm yêu thích">🤍</button>
+            </div>
+            <div class="companion-card__body">
+              <h2 class="companion-card__name">Nguyễn Thị Lan</h2>
+              <p class="companion-card__loc">📍 Hà Nội</p>
+              <div class="companion-card__tags">
+                <span class="companion-tag">Du lịch</span>
+                <span class="companion-tag">Ẩm thực</span>
+              </div>
+              <div class="companion-card__meta">
+                <span class="companion-card__rating"><span aria-hidden="true">⭐</span> 4.9 (128)</span>
+                <span class="companion-card__price">500k/h</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="companion-card" role="listitem">
+            <div class="companion-card__media">
+              <span class="companion-card__avatar" aria-hidden="true">👨</span>
+              <button type="button" class="companion-card__fav" aria-label="Đã yêu thích" aria-pressed="true">
+                ❤️
+              </button>
+            </div>
+            <div class="companion-card__body">
+              <h2 class="companion-card__name">Trần Văn Minh</h2>
+              <p class="companion-card__loc">📍 TP. HCM</p>
+              <div class="companion-card__tags">
+                <span class="companion-tag">Thể thao</span>
+                <span class="companion-tag">Âm nhạc</span>
+              </div>
+              <div class="companion-card__meta">
+                <span class="companion-card__rating"><span aria-hidden="true">⭐</span> 4.8 (96)</span>
+                <span class="companion-card__price">600k/h</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="companion-card" role="listitem">
+            <div class="companion-card__media">
+              <span class="companion-card__avatar" aria-hidden="true">👩</span>
+              <span class="companion-card__badge companion-card__badge--online">🟢 Online</span>
+              <button type="button" class="companion-card__fav" aria-label="Thêm yêu thích">🤍</button>
+            </div>
+            <div class="companion-card__body">
+              <h2 class="companion-card__name">Lê Thị Hương</h2>
+              <p class="companion-card__loc">📍 Đà Nẵng</p>
+              <div class="companion-card__tags">
+                <span class="companion-tag">Cafe</span>
+                <span class="companion-tag">Đọc sách</span>
+              </div>
+              <div class="companion-card__meta">
+                <span class="companion-card__rating"><span aria-hidden="true">⭐</span> 4.7 (84)</span>
+                <span class="companion-card__price">450k/h</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="companion-card" role="listitem">
+            <div class="companion-card__media">
+              <span class="companion-card__avatar" aria-hidden="true">👨</span>
+              <button type="button" class="companion-card__fav" aria-label="Thêm yêu thích">🤍</button>
+            </div>
+            <div class="companion-card__body">
+              <h2 class="companion-card__name">Phạm Hoàng Nam</h2>
+              <p class="companion-card__loc">📍 Hà Nội</p>
+              <div class="companion-card__tags">
+                <span class="companion-tag">Gaming</span>
+                <span class="companion-tag">Phim ảnh</span>
+              </div>
+              <div class="companion-card__meta">
+                <span class="companion-card__rating"><span aria-hidden="true">⭐</span> 4.9 (156)</span>
+                <span class="companion-card__price">550k/h</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </main>
     </div>
-</body>
+    <script type="module" src="/js/app.js"></script>
+  </body>
 </html>

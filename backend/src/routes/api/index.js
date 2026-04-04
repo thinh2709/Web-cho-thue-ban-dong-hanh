@@ -1,18 +1,8 @@
-import express from 'express';
-import bookingRoutes from './bookingRoutes.js';
-import homeFavoriteRoutes from './homeFavoriteRoutes.js';
-import reportPricingRoutes from './reportPricingRoutes.js';
-import categoryPartnerRoutes from './categoryPartnerRoutes.js';
-import companionEarningsRoutes from './companionEarningsRoutes.js';
-import userProfileRoutes from './userProfileRoutes.js';
+import { Router } from "express";
+import { usersRouter } from "./users.js";
+import { bookingsRouter } from "./bookings.js";
 
-const router = express.Router();
+export const apiRouter = Router();
 
-router.use('/bookings', bookingRoutes);
-router.use('/home-favorites', homeFavoriteRoutes);
-router.use('/reports-pricing', reportPricingRoutes);
-router.use('/categories-partners', categoryPartnerRoutes);
-router.use('/companions', companionEarningsRoutes);
-router.use('/users', userProfileRoutes);
-
-export default router;
+apiRouter.use("/users", usersRouter);
+apiRouter.use("/bookings", bookingsRouter);

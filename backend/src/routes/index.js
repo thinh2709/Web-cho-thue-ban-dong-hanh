@@ -1,8 +1,10 @@
-import { Router } from 'express';
-import apiRoutes from './api/index.js';
+import { Router } from "express";
+import { apiRouter } from "./api/index.js";
 
-const router = Router();
+export const rootRouter = Router();
 
-router.use('/api', apiRoutes);
+rootRouter.use("/api", apiRouter);
 
-export default router;
+rootRouter.get("/health", (_req, res) => {
+  res.json({ ok: true });
+});

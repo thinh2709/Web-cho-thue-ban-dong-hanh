@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Booking — Thuê bạn đồng hành</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body class="page-booking">
+    <div class="app-layout">
+      <aside class="app-sidebar" aria-label="Điều hướng">
+        <a class="app-sidebar__logo" href="/" title="Trang chủ">🏠</a>
+        <nav class="app-sidebar__nav" aria-label="Chính">
+          <a class="app-sidebar__link" href="/" title="Trang chủ">🏠</a>
+          <a class="app-sidebar__link" href="/profile.html" title="Hồ sơ">👤</a>
+          <a class="app-sidebar__link" href="/my-bookings.html" aria-current="page" title="Booking"
+            >📘</a
+          >
+        </nav>
+      </aside>
+      <div class="app-main">
+        <header class="booking-hero">
+          <div class="booking-hero__inner">
+            <h1 class="booking-hero__title">
+              <span class="booking-hero__icon" aria-hidden="true">📘</span>
+              Booking của tôi
+            </h1>
+            <p class="lead lead--on-dark" style="margin-bottom: 0">
+              Góc nhìn người thuê: hủy lịch hoặc chỉnh ghi chú và khung giờ khi booking còn
+              <strong>chờ xác nhận</strong>.
+            </p>
+          </div>
+        </header>
+        <div class="app-main__inner">
+          <p id="bookings-message" class="form-message" role="status"></p>
+          <div id="bookings-list"></div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/js/my-bookings.js"></script>
+  </body>
+</html>

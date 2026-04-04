@@ -1,16 +1,11 @@
-import app from './app.js';
-import connectDB from './config/database.js';
-import dotenv from 'dotenv';
+import "dotenv/config";
+import { createApp } from "./app.js";
+import { connectDatabase } from "./config/database.js";
 
-dotenv.config();
+const port = Number(process.env.PORT) || 3000;
 
-const PORT = process.env.PORT || 5000;
-
-// Connect to Database
-connectDB().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
-}).catch(err => {
-  console.error('Failed to start server:', err);
+await connectDatabase();
+const app = createApp();
+app.listen(port, () => {
+  console.log(`API lắng nghe tại http://localhost:${port}`);
 });
