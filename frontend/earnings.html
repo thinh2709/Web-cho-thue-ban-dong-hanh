@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Thống kê thu nhập</title>
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <aside class="sidebar">
+        <div class="sidebar__brand">💼</div>
+        <a class="nav-link" data-nav="profile" href="./companion-profile.html" title="Hồ sơ">👤</a>
+        <a class="nav-link" data-nav="calendar" href="./earnings.html" title="Lịch">🗓️</a>
+        <a class="nav-link" data-nav="requests" href="./earnings.html" title="Yêu cầu">📬</a>
+        <a class="nav-link" data-nav="earnings" href="./earnings.html" title="Thu nhập">💰</a>
+        <a class="nav-link" data-nav="settings" href="./earnings.html" title="Cài đặt">⚙️</a>
+      </aside>
+
+      <main class="main">
+        <div class="container">
+          <div class="row">
+            <div class="h1" style="margin: 0">💰 Thống kê thu nhập</div>
+            <form class="filters" id="filters">
+              <input class="input" name="from" type="date" />
+              <span class="muted">→</span>
+              <input class="input" name="to" type="date" />
+              <button class="btn btn-primary" type="submit">Lọc</button>
+            </form>
+          </div>
+
+          <div style="margin-top: 10px" data-status class="muted"></div>
+
+          <section class="stat-cards">
+            <div class="card stat-card">
+              <div class="stat-label">Tổng thu nhập</div>
+              <div class="stat-value" id="totalAmount">0₫</div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-label">Cuộc hẹn hoàn thành</div>
+              <div class="stat-value" id="completedCount">0</div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-label">Trung bình / cuộc hẹn</div>
+              <div class="stat-value" id="avgPerBooking">0₫</div>
+            </div>
+            <div class="card stat-card">
+              <div class="stat-label">Số ngày có doanh thu</div>
+              <div class="stat-value" id="activeDays">0</div>
+            </div>
+          </section>
+
+          <section class="split">
+            <div class="card card--p24">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px">
+                <div style="font-weight: 700; color: rgba(255, 255, 255, 0.95)">Doanh thu theo ngày</div>
+                <div class="muted" id="rangeLabel"></div>
+              </div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Ngày</th>
+                    <th>Số cuộc hẹn</th>
+                    <th>Tổng</th>
+                  </tr>
+                </thead>
+                <tbody id="byDayBody"></tbody>
+              </table>
+            </div>
+            <div class="card card--p24">
+              <div style="font-weight: 700; color: rgba(255, 255, 255, 0.95)">Tóm tắt</div>
+              <div style="margin-top: 16px; display: grid; gap: 10px; color: rgba(255, 255, 255, 0.95)">
+                <div class="row">
+                  <span class="muted">Tổng thu nhập</span>
+                  <strong id="sumTotal">0₫</strong>
+                </div>
+                <div class="row">
+                  <span class="muted">Hoàn thành</span>
+                  <strong id="sumCount">0</strong>
+                </div>
+                <div class="row">
+                  <span class="muted">TB / cuộc hẹn</span>
+                  <strong id="sumAvg">0₫</strong>
+                </div>
+              </div>
+              <div style="margin-top: 18px" class="muted">API: GET /api/companions/me/earnings?from=&to=</div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script type="module">
+      import { apiFetch, formatCurrencyVND } from "./js/api.js";
+      import { setActiveNav, setStatus } from "./js/app.js";
+
+      setActiveNav("earnings");
+
+      const form = document.getElementById("filters");
+      const byDayBody = document.getElementById("byDayBody");
+
+      function toInputDate(d) {
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, "0");
+        const dd = String(d.getDate()).padStart(2, "0");
+        return `${yyyy}-${mm}-${dd}`;
+      }
+
+      function defaultRange() {
+        const now = new Date();
+        const from = new Date(now.getFullYear(), now.getMonth(), 1);
+        const to = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+        return { from, to };
+      }
+
+      const { from, to } = defaultRange();
+      form.from.value = toInputDate(from);
+      form.to.value = toInputDate(to);
+
+      function renderRows(byDay) {
+        byDayBody.innerHTML = "";
+        if (!byDay.length) {
+          byDayBody.innerHTML =
+            '<tr><td colspan="3" class="muted">Chưa có dữ liệu (cần booking trạng thái completed).</td></tr>';
+          return;
+        }
+        for (const row of byDay) {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${row.date}</td>
+            <td>${row.count}</td>
+            <td>${formatCurrencyVND(row.totalAmount)}</td>
+          `;
+          byDayBody.appendChild(tr);
+        }
+      }
+
+      async function load() {
+        try {
+          const fromValue = form.from.value ? new Date(form.from.value).toISOString() : "";
+          const toValue = form.to.value ? new Date(form.to.value).toISOString() : "";
+          const qs = new URLSearchParams();
+          if (fromValue) qs.set("from", fromValue);
+          if (toValue) qs.set("to", toValue);
+          setStatus("Đang tải thống kê...");
+          const res = await apiFetch(`/api/companions/me/earnings?${qs.toString()}`);
+          const data = res.data;
+
+          const total = data.totalAmount ?? 0;
+          const count = data.completedCount ?? 0;
+          const avg = count > 0 ? total / count : 0;
+
+          document.getElementById("totalAmount").textContent = formatCurrencyVND(total);
+          document.getElementById("completedCount").textContent = String(count);
+          document.getElementById("avgPerBooking").textContent = formatCurrencyVND(avg);
+          document.getElementById("activeDays").textContent = String(Array.isArray(data.byDay) ? data.byDay.length : 0);
+
+          document.getElementById("sumTotal").textContent = formatCurrencyVND(total);
+          document.getElementById("sumCount").textContent = String(count);
+          document.getElementById("sumAvg").textContent = formatCurrencyVND(avg);
+
+          document.getElementById("rangeLabel").textContent = `${form.from.value} → ${form.to.value}`;
+
+          renderRows(Array.isArray(data.byDay) ? data.byDay : []);
+          setStatus("");
+        } catch (e) {
+          setStatus(e.message, "error");
+        }
+      }
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        load();
+      });
+
+      load();
+    </script>
+  </body>
+</html>
+
