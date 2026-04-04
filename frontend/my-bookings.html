@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Booking của tôi — Thuê bạn đồng hành</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="brand" href="/">Thuê <span>bạn đồng hành</span></a>
+        <nav class="nav" aria-label="Chính">
+          <a href="/">Trang chủ</a>
+          <a href="/profile.html">Hồ sơ</a>
+          <a href="/my-bookings.html" aria-current="page">Booking của tôi</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <h1 class="page-title">Booking của tôi</h1>
+      <p class="lead">
+        Góc nhìn người thuê: hủy lịch hoặc chỉnh ghi chú và khung giờ khi booking còn
+        <strong>chờ xác nhận</strong>.
+      </p>
+      <p id="bookings-message" class="form-message" role="status"></p>
+      <div id="bookings-list"></div>
+    </main>
+    <script type="module" src="/js/my-bookings.js"></script>
+  </body>
+</html>
