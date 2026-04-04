@@ -1,12 +1,14 @@
-import { connectDatabase } from "./config/database.js";
-import createApp from "./app.js";
+import app from './app.js';
+import connectDB from './config/database.js';
+import dotenv from 'dotenv';
 
-const port = Number(process.env.PORT || 3000);
+dotenv.config();
 
-await connectDatabase();
+const PORT = process.env.PORT || 5000;
 
-const app = createApp();
+// Connect to Database
+connectDB();
 
-app.listen(port, () => {
-  process.stdout.write(`Backend listening on http://localhost:${port}\n`);
+app.listen(PORT, () => {
+  console.log(`Server is running in ${process.env.NODE_ENV} mode on port ${PORT}`);
 });

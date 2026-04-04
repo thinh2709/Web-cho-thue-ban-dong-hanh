@@ -1,10 +1,10 @@
-import { Router } from "express";
-import favoritesRouter from "./favorites.js";
-import homeRouter from "./home.js";
+import express from 'express';
+import categoryRoutes from './category.routes.js';
+import partnerRoutes from './partner.routes.js';
 
-const router = Router();
+const router = express.Router();
 
-router.use("/home", homeRouter);
-router.use("/favorites", favoritesRouter);
+router.use('/categories', categoryRoutes);
+router.use('/partners', partnerRoutes);
 
 export default router;
