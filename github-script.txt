@@ -100,3 +100,95 @@ Trananh — hồ sơ bạn đồng hành + thống kê thu nhập:
 
 Thịnh — quản lý hồ sơ + booking:
   git switch -c feature/thinh-quan-ly-ho-so-booking
+
+---
+
+## Kế hoạch triển khai (cơ chế, logic, FE/BE) + commit GitHub theo nhánh
+
+**MCP:** Trong project chỉ có server Figma (đã đọc resource `structure-figma-file`): nên dùng component, Figma variables, Auto Layout, tên layer rõ nghĩa để UI đồng bộ design. **Không** có MCP GitHub hay “planning API” — phần dưới là kế hoạch kỹ thuật theo stack **HTML + REST API (Node) + MongoDB**.
+
+### Áp dụng chung cho cả nhóm
+
+- **Cơ chế:** FE gọi `fetch` tới `BASE_URL/api/...` (JSON). BE nhận request → middleware (auth/CORS nếu có) → **route** → **controller** (logic) → **model** Mongoose → trả JSON + HTTP status.
+- **Logic nghiệp vụ:** validate body/query; kiểm tra quyền (user chỉ sửa dữ liệu của mình trừ admin); idempotency nơi cần (ví dụ không tạo trùng booking cùng slot).
+- **Cấu trúc code gợi ý:** `frontend/pages/` hoặc file HTML theo màn; `frontend/js/<ten>.js`; `backend/src/routes/api/`, `controllers/`, `models/`.
+- **GitHub:** tạo nhánh `feature/...` như bảng trên → commit nhỏ theo quy ước → `git push -u origin <nhánh>` → mở Pull Request vào `main`. Ví dụ chuỗi commit trên một nhánh:
+  - `chore: thêm route và model skeleton cho module X`
+  - `feat(api-X): thêm endpoint ...`
+  - `feat(X): thêm giao diện và gọi API`
+
+---
+
+### Thiện — `feature/thien-trang-chu-danh-sach-yeu-thich`
+
+| Lớp | Việc làm |
+|-----|----------|
+| **Logic** | Trang chủ: tải dữ liệu nổi bật (companion/dịch vụ) từ API. Yêu thích: user đánh dấu/bỏ đánh dấu companion; danh sách chỉ của user đó (cần user id sau đăng nhập hoặc tạm thời query param — team thống nhất). |
+| **FE** | `index.html` (hoặc `home.html`): hero, danh sách gợi ý; `favorites.html`: bảng/thẻ + nút xóa. JS: gọi `GET /api/home/...`, `GET/POST/DELETE /api/favorites`. |
+| **BE** | Route ví dụ: `GET /api/home/featured`, `GET /api/favorites`, `POST /api/favorites`, `DELETE /api/favorites/:companionId`. Controller kiểm tra tồn tại companion; model `Favorite` `{ userId, companionId, createdAt }`. |
+| **Commit gợi ý** | `feat(home): thêm API và UI trang chủ`; `feat(favorites): thêm CRUD yêu thích và trang danh sách`; `fix(favorites): chặn trùng yêu thích`. |
+
+---
+
+### Tài — `feature/tai-dat-lich-quan-ly-lich-hen`
+
+| Lớp | Việc làm |
+|-----|----------|
+| **Logic** | Đặt lịch: chọn companion, khung giờ, ghi chú → tạo bản ghi **Appointment/Booking** trạng thái `pending`. Quản lý lịch: danh sách theo user hoặc companion; đổi trạng thái (`confirmed`, `cancelled`, `completed`); chống double-book (cùng companion + slot). |
+| **FE** | `booking.html`: form + bước chọn thời gian; `appointments.html`: bảng lịch, lọc, nút đổi trạng thái. |
+| **BE** | `POST /api/bookings` (hoặc `/api/appointments`), `GET` (lọc theo role), `PATCH /api/appointments/:id/status`. Model: tham chiếu `userId`, `companionId`, `start`, `end`, `status`. |
+| **Commit gợi ý** | `feat(booking): thêm luồng đặt lịch và API tạo lịch`; `feat(appointments): thêm quản lý lịch và API cập nhật trạng thái`; `fix(booking): kiểm tra trùng slot`. |
+
+---
+
+### Hoàn — `feature/hoan-thong-ke-bao-cao-bang-gia-dich-vu`
+
+| Lớp | Việc làm |
+|-----|----------|
+| **Logic** | Báo cáo: aggregate MongoDB (đếm booking, doanh thu, theo ngày/tháng) với query param `from`, `to`. Bảng giá: CRUD gói dịch vụ (tên, giá, đơn vị, hiển thị public hay không). |
+| **FE** | `reports.html`: biểu đồ/bảng (có thể dùng thư viện chart sau); `pricing.html`: bảng giá + form admin (nếu có phân quyền). |
+| **BE** | `GET /api/reports/summary?from=&to=`, `GET/POST/PATCH/DELETE /api/pricing` (bảo vệ route admin nếu cần). |
+| **Commit gợi ý** | `feat(reports): thêm API thống kê và trang báo cáo`; `feat(pricing): thêm CRUD bảng giá và UI`; `docs(reports): mô tả query thống kê`. |
+
+---
+
+### Cảnh — `feature/canh-quan-ly-danh-muc-dang-ky-partner`
+
+| Lớp | Việc làm |
+|-----|----------|
+| **Logic** | Danh mục: CRUD phân cấp hoặc danh sách phẳng; companion gắn `categoryId`. Partner: form đăng ký → lưu `pending`; admin (hoặc flow duyệt) cập nhật `approved`/`rejected`. |
+| **FE** | `categories.html`: CRUD; `partner-register.html`: form + trạng thái hồ sơ. |
+| **BE** | `GET/POST/PATCH/DELETE /api/categories`; `POST /api/partners/register`; `PATCH /api/partners/:id/review` (duyệt). Model `Category`, `PartnerApplication`. |
+| **Commit gợi ý** | `feat(categories): thêm quản lý danh mục và API`; `feat(partner): thêm đăng ký và duyệt partner`; `chore(partner): validate dữ liệu đăng ký`. |
+
+---
+
+### Trananh — `feature/trananh-ho-so-ban-dong-hanh-thong-ke-thu-nhap`
+
+| Lớp | Việc làm |
+|-----|----------|
+| **Logic** | Hồ sơ companion: ảnh, bio, kỹ năng, lịch rảnh (hoặc liên kết model User). Thu nhập: tổng hợp booking `completed` theo companion + khoảng thời gian (có thể join bảng giá/commission — team quy ước). |
+| **FE** | `companion-profile.html`: form chỉnh sửa + preview; `earnings.html`: bảng/biểu đồ theo kỳ. |
+| **BE** | `GET/PATCH /api/companions/me` (hoặc `/api/companions/:id` có kiểm tra quyền); `GET /api/companions/me/earnings?from=&to=`. |
+| **Commit gợi ý** | `feat(companion-profile): thêm API và UI hồ sơ bạn đồng hành`; `feat(earnings): thêm thống kê thu nhập`; `refactor(companion-profile): tách upload ảnh`. |
+
+---
+
+### Thịnh — `feature/thinh-quan-ly-ho-so-booking`
+
+| Lớp | Việc làm |
+|-----|----------|
+| **Logic** | Hồ sơ: user thường chỉnh tên, SĐT, avatar (khác companion profile nếu có 2 vai trò). Booking (phía Thịnh): **góc nhìn người thuê** — xem “booking của tôi”, hủy/sửa nếu còn trong policy; không trùng chức năng quản lý lịch toàn phần của Tài (Tài: lịch hẹn/slot; Thịnh: quản lý booking cá nhân). |
+| **FE** | `profile.html`: form cập nhật; `my-bookings.html`: danh sách + hành động. |
+| **BE** | `GET/PATCH /api/users/me`; `GET /api/users/me/bookings`; `PATCH /api/bookings/:id` (hủy/chỉnh sửa trong điều kiện cho phép). |
+| **Commit gợi ý** | `feat(profile): thêm quản lý hồ sơ user và API`; `feat(booking-mgmt): thêm màn booking cá nhân và API`; `fix(profile): sửa upload avatar`. |
+
+---
+
+### PR lên GitHub (mọi người)
+
+git add .
+git commit -m "feat(...): mô tả ngắn"
+git push -u origin feature/<ten-nhanh-cua-ban>
+
+Trên GitHub: **Compare & pull request** → mô tả PR liệt kê tính năng + ảnh chụp màn hình (nếu có). Reviewer kiểm tra không đụng file người khác ngoài phần hợp đồng (ví dụ `app.js` mount route).
