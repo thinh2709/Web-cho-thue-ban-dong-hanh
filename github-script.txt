@@ -21,40 +21,82 @@ Ví dụ:
   chore: cập nhật dependencies
   docs: bổ sung hướng dẫn chạy backend
 
-Nếu cần giải thích dài, sau dòng 1 để một dòng trống rồi viết body.
+## Commit chỉ file github-script.txt
+
+Chỉ stage và commit đúng file này (đổi message cho khớp thay đổi thực tế):
+
+git add github-script.txt
+git commit -m "docs(github-script): cập nhật ghi chú git và quy ước nhóm"
+
+Đẩy lên remote (đang đứng nhánh hiện tại):
+
+git push origin HEAD
 
 ---
 
-## Trạng thái & xem thay đổi
-git status
-git diff
-git diff --staged
+## Phân công tính năng & gợi ý commit (mỗi người làm cả frontend và backend phần của mình)
 
-## Thêm file (staging)
-git add .
-git add <đường-dẫn-file>
-git add -p
+Dùng scope ngắn, thống nhất trong nhóm. Có thể **một commit gộp** (UI + API cùng tính năng) hoặc **tách 2 commit**: `feat(scope-ui)` rồi `feat(api-scope)`.
 
-## Commit (theo quy ước trên)
-git commit -m "chore: mô tả ngắn gọn đúng loại"
-git commit -m "feat(ui): thêm form đăng ký"
+### Thiện — Trang chủ, danh sách yêu thích
+Scope gợi ý: `home`, `favorites`
 
-## Đẩy tiến trình lên remote
-git push origin main
+  feat(home): thêm trang chủ và API dữ liệu hiển thị trang chủ
+  feat(favorites): thêm danh sách yêu thích và API CRUD yêu thích
+  fix(home): sửa hiển thị banner trên mobile
+  fix(api-favorites): sửa lỗi xóa mục yêu thích không đồng bộ DB
 
-## Remote & đồng bộ
-git remote -v
-git pull origin main
+### Tài — Trang đặt lịch, quản lý lịch hẹn
+Scope gợi ý: `booking`, `appointments`
 
-## Nhánh
-git branch
-git branch <tên-nhánh>
-git switch <tên-nhánh>
-git switch -c <tên-nhánh-mới>
+  feat(booking): thêm luồng đặt lịch (form + API tạo lịch)
+  feat(appointments): thêm quản lý lịch hẹn và API cập nhật trạng thái
+  fix(booking): chặn đặt trùng khung giờ
 
-## Lịch sử
-git log --oneline -10
+### Hoàn — Thống kê báo cáo, bảng giá dịch vụ
+Scope gợi ý: `reports`, `pricing`
 
-## Hoàn tác (cẩn thận)
-git restore <file>
-git restore --staged <file>
+  feat(reports): thêm trang thống kê và API tổng hợp số liệu
+  feat(pricing): thêm bảng giá dịch vụ và API quản lý bảng giá
+  docs(reports): mô tả tham số filter báo cáo
+
+### Cảnh — Quản lý danh mục, đăng ký partner
+Scope gợi ý: `categories`, `partner`
+
+  feat(categories): thêm quản lý danh mục và API CRUD danh mục
+  feat(partner): thêm đăng ký partner và API duyệt/từ chối hồ sơ
+  chore(partner): thêm validation email/SĐT khi đăng ký
+
+### Trananh — Hồ sơ bạn đồng hành, thống kê thu nhập
+Scope gợi ý: `companion-profile`, `earnings`
+
+  feat(companion-profile): thêm hồ sơ bạn đồng hành và API cập nhật hồ sơ
+  feat(earnings): thêm thống kê thu nhập và API báo cáo thu theo kỳ
+  refactor(companion-profile): tách logic upload ảnh ra service
+
+### Thịnh — Quản lý hồ sơ, booking
+Scope gợi ý: `profile`, `booking-mgmt` (tránh nhầm với `booking` của Tài nếu cùng từ — thống nhất tên trong team)
+
+  feat(profile): thêm quản lý hồ sơ người dùng và API chỉnh sửa thông tin
+  feat(booking-mgmt): thêm màn booking phụ trách và API liên quan
+  fix(profile): sửa lỗi không lưu được ảnh đại diện
+
+### Gợi ý nhánh theo người (tùy chọn) — `feature/<tên-các-tính-năng>`, mỗi người một nhánh
+
+Thiện — trang chủ + danh sách yêu thích:
+  git switch -c feature/thien-trang-chu-danh-sach-yeu-thich
+
+Tài — đặt lịch + quản lý lịch hẹn:
+  git switch -c feature/tai-dat-lich-quan-ly-lich-hen
+
+Hoàn — thống kê báo cáo + bảng giá dịch vụ:
+  git switch -c feature/hoan-thong-ke-bao-cao-bang-gia-dich-vu
+
+Cảnh — quản lý danh mục + đăng ký partner:
+  git switch -c feature/canh-quan-ly-danh-muc-dang-ky-partner
+
+Trananh — hồ sơ bạn đồng hành + thống kê thu nhập:
+  git switch -c feature/trananh-ho-so-ban-dong-hanh-thong-ke-thu-nhap
+
+Thịnh — quản lý hồ sơ + booking:
+  git switch -c feature/thinh-quan-ly-ho-so-booking
