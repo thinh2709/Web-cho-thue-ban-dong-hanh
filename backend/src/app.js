@@ -1,25 +1,26 @@
-import express from 'express';
-import cors from 'cors';
-import routes from './routes/index.js';
+import express from "express";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import apiRouter from "./routes/api/index.js";
 
-const app = express();
+export default function createApp() {
+  const app = express();
 
-app.use(cors({ origin: true, credentials: true }));
-app.use(express.json());
+  app.use(express.json());
+  app.use("/api", apiRouter);
 
-app.get('/health', (_req, res) => {
-  res.json({ ok: true });
-});
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+  const frontendDir = path.resolve(__dirname, "..", "frontend");
+  app.use(express.static(frontendDir));
 
-app.use(routes);
+  app.get("/favorites", (_req, res) => {
+    res.sendFile(path.join(frontendDir, "favorites.html"));
+  });
 
-app.use((req, res) => {
-  res.status(404).json({ message: 'Không tìm thấy' });
-});
+  app.get("/health", (_req, res) => {
+    res.status(200).json({ ok: true });
+  });
 
-app.use((err, _req, res, _next) => {
-  const status = err.status || 500;
-  res.status(status).json({ message: err.message || 'Lỗi máy chủ' });
-});
-
-export default app;
+  return app;
+}

@@ -1,10 +1,10 @@
-import { Router } from 'express';
-import pricingRoutes from './pricing.routes.js';
-import reportsRoutes from './reports.routes.js';
+import { Router } from "express";
+import favoritesRouter from "./favorites.js";
+import homeRouter from "./home.js";
 
 const router = Router();
 
-router.use('/pricing', pricingRoutes);
-router.use('/reports', reportsRoutes);
+router.use("/home", homeRouter);
+router.use("/favorites", favoritesRouter);
 
 export default router;
