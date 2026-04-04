@@ -1,22 +1,19 @@
-import dotenv from "dotenv";
+import 'dotenv/config';
+import app from './app.js';
+import { connectDB } from './config/database.js';
+import { seedDatabase } from '../Config/seedData.js';
 
-import createApp from "./app.js";
-import { connectDatabase } from "./config/database.js";
-import { createStorage } from "./storage/index.js";
+const PORT = Number(process.env.PORT) || 3000;
 
-dotenv.config();
-
-const port = process.env.PORT ? Number(process.env.PORT) : 4000;
-const mongoUri = process.env.MONGODB_URI;
-
-const db = await connectDatabase({ mongoUri });
-if (!db.connected) {
-  console.warn(`MongoDB disabled: ${db.error}`);
+try {
+  await connectDB();
+  if (process.env.NODE_ENV === 'development') {
+    await seedDatabase();
+  }
+  app.listen(PORT, () => {
+    console.log(`API lắng nghe tại http://localhost:${PORT}`);
+  });
+} catch (err) {
+  console.error('Không khởi động được server:', err);
+  process.exit(1);
 }
-
-const storage = createStorage({ mongoConnected: db.connected });
-const app = createApp({ storage });
-
-app.listen(port, () => {
-  console.log(`Backend listening on http://localhost:${port}`);
-});

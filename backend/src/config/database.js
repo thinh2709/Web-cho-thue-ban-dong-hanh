@@ -1,15 +1,10 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-export async function connectDatabase({ mongoUri }) {
-  mongoose.set("strictQuery", true);
-  if (!mongoUri) {
-    return { connected: false, connection: null, error: "Missing MONGODB_URI" };
+export async function connectDB() {
+  const uri = process.env.MONGODB_URI;
+  if (!uri) {
+    throw new Error('Thiếu biến môi trường MONGODB_URI');
   }
-
-  try {
-    await mongoose.connect(mongoUri, { serverSelectionTimeoutMS: 3000 });
-    return { connected: true, connection: mongoose.connection, error: null };
-  } catch (e) {
-    return { connected: false, connection: null, error: e?.message || String(e) };
-  }
+  mongoose.set('strictQuery', true);
+  await mongoose.connect(uri);
 }

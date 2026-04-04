@@ -1,32 +1,25 @@
-import cors from "cors";
-import express from "express";
+import express from 'express';
+import cors from 'cors';
+import routes from './routes/index.js';
 
-import routes from "./routes/index.js";
+const app = express();
 
-export default function createApp({ storage }) {
-  const app = express();
-  app.locals.storage = storage;
+app.use(cors({ origin: true, credentials: true }));
+app.use(express.json());
 
-  app.use(
-    cors({
-      origin: "*",
-    }),
-  );
+app.get('/health', (_req, res) => {
+  res.json({ ok: true });
+});
 
-  app.use(express.json({ limit: "2mb" }));
+app.use(routes);
 
-  app.use((req, res, next) => {
-    const headerUserId = req.header("x-user-id");
-    const queryUserId = typeof req.query.userId === "string" ? req.query.userId : undefined;
-    req.actorUserId = headerUserId || queryUserId || "demo-user";
-    next();
-  });
+app.use((req, res) => {
+  res.status(404).json({ message: 'Không tìm thấy' });
+});
 
-  app.use(routes);
+app.use((err, _req, res, _next) => {
+  const status = err.status || 500;
+  res.status(status).json({ message: err.message || 'Lỗi máy chủ' });
+});
 
-  app.use((req, res) => {
-    res.status(404).json({ message: "Not found" });
-  });
-
-  return app;
-}
+export default app;

@@ -1,22 +1,21 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const bookingSchema = new mongoose.Schema(
   {
-    userId: { type: String, required: true, index: true },
-    companionId: { type: mongoose.Schema.Types.ObjectId, ref: "Companion", required: true, index: true },
-    startAt: { type: Date, required: true },
-    endAt: { type: Date, required: true },
+    customerName: { type: String, default: 'Khách hàng', trim: true },
+    amount: { type: Number, required: true, min: 0 },
     status: {
       type: String,
-      enum: ["pending", "confirmed", "cancelled", "completed"],
-      default: "pending",
-      index: true,
+      enum: ['pending', 'completed', 'cancelled'],
+      default: 'pending',
     },
-    amount: { type: Number, default: 0 },
-    completedAt: { type: Date },
+    completedAt: { type: Date, default: null },
+    rating: { type: Number, min: 0, max: 5, default: null },
+    durationHours: { type: Number, min: 0, default: 0 },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
-export default mongoose.models.Booking || mongoose.model("Booking", bookingSchema);
+bookingSchema.index({ status: 1, completedAt: 1 });
 
+export default mongoose.model('Booking', bookingSchema);

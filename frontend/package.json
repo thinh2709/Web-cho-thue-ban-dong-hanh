@@ -1,0 +1,13 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "serve -l 5173 .",
+    "dev": "live-server --port=5173 --open=pages/pricing.html --watch=js,pages ."
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "serve": "^14.2.4"
+  }
+}
