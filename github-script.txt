@@ -183,6 +183,26 @@ Thịnh — quản lý hồ sơ + booking:
 | **BE** | `GET/PATCH /api/users/me`; `GET /api/users/me/bookings`; `PATCH /api/bookings/:id` (hủy/chỉnh sửa trong điều kiện cho phép). |
 | **Commit gợi ý** | `feat(profile): thêm quản lý hồ sơ user và API`; `feat(booking-mgmt): thêm màn booking cá nhân và API`; `fix(profile): sửa upload avatar`. |
 
+#### Ghi chú cho nhánh `feature/thinh-quan-ly-ho-so-booking` (chỉ viết lệnh vào đây, không tự chạy git)
+
+Khi AI/cộng tác viên chỉnh code, **không** thực thi lệnh `git` thay người — chỉ cập nhật file `github-script.txt` (hoặc để người tự chạy tay). Hai commit gợi ý tách API và UI theo Figma (node `150:90` Quản lý hồ sơ, `218:472` Booking):
+
+**Commit 1 — API + phản hồi hồ sơ**
+
+  git add backend/src/controllers/userController.js
+  git commit -m "feat(api-profile): trả thêm isDemo trong GET/PATCH /api/users/me"
+
+(Nếu còn thay đổi route/model booking cùng đợt, có thể `git add` thêm `backend/src/routes/api/users.js`, `bookings.js`, `controllers/bookingController.js`, v.v. cho cùng commit hoặc tách commit riêng tùy team.)
+
+**Commit 2 — Giao diện Figma (shell sidebar, glass panel, trang Booking)**
+
+  git add frontend/css/styles.css frontend/index.html frontend/profile.html frontend/js/profile.js frontend/my-bookings.html frontend/js/my-bookings.js
+  git commit -m "feat(booking-mgmt): UI theo Figma cho hồ sơ, booking và trang chủ"
+
+Sau đó (người làm, trên nhánh đã checkout):
+
+  git push -u origin feature/thinh-quan-ly-ho-so-booking
+
 ---
 
 ### PR lên GitHub (mọi người)
