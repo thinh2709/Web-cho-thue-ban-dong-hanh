@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thuê bạn đồng hành</title>
+  <link rel="stylesheet" href="./css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+</head>
+<body>
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo" style="margin-bottom: 40px;"><i class="fa-solid fa-fan" style="color: #fca5a5; font-size: 28px;"></i></div>
+      <nav class="sidebar-nav">
+        <a href="./index.html" class="nav-item active" title="Trang chủ">
+          <i class="fa-solid fa-book-open"></i>
+          <span>Booking</span>
+        </a>
+        <a href="#" class="nav-item" title="Tìm kiếm">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <span>Tìm kiếm</span>
+        </a>
+        <a href="#" class="nav-item" title="Lịch hẹn">
+          <i class="fa-solid fa-calendar-check"></i>
+          <span>Lịch hẹn</span>
+        </a>
+        <a href="./favorites.html" class="nav-item" title="Yêu thích">
+          <i class="fa-solid fa-heart"></i>
+          <span>Yêu thích</span>
+        </a>
+        <a href="#" class="nav-item" title="Đánh giá">
+          <i class="fa-solid fa-star"></i>
+          <span>Đánh giá</span>
+        </a>
+        <a href="#" class="nav-item" title="Báo cáo">
+          <i class="fa-solid fa-bullhorn"></i>
+          <span>Báo cáo</span>
+        </a>
+      </nav>
+      <div class="sidebar-bottom">
+        <a href="#" class="nav-item"><i class="fa-solid fa-user"></i></a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Hero Section -->
+      <section class="hero" style="text-align: center; padding: 60px 20px 40px;">
+        <h1 class="hero-title" style="font-size: 40px; font-weight: 700; margin-bottom: 16px;">🌸 Chào mừng bạn!</h1>
+        <p class="hero-subtitle" style="font-size: 16px; margin-bottom: 32px; color: rgba(255,255,255,0.9);">Khám phá và kết nối với những người bạn đồng hành tuyệt vời,<br>sẵn sàng chia sẻ những trải nghiệm đáng nhớ cùng bạn.</p>
+        <div class="hero-actions" style="display: flex; justify-content: center; gap: 16px;">
+          <button class="btn" style="background: white; color: #3b82f6; padding: 12px 24px; border-radius: 100px; font-weight: 600;"><i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm ngay</button>
+          <button class="btn" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.4); padding: 12px 24px; border-radius: 100px; font-weight: 600;"><i class="fa-regular fa-clipboard"></i> Xem danh mục</button>
+        </div>
+      </section>
+
+      <!-- Stats Section -->
+      <section class="stats-section container" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; text-align: center; margin-bottom: 40px;">
+        <div class="stat-card" style="background: rgba(255,255,255,0.15); backdrop-filter: blur(12px); border-radius: 20px; padding: 24px; border: 1px solid rgba(255,255,255,0.2);">
+          <div style="font-size: 32px; margin-bottom: 8px;">👥</div>
+          <h3 style="font-size: 28px; font-weight: 700; margin-bottom: 4px;">500+</h3>
+          <p style="font-size: 14px; opacity: 0.8;">Bạn đồng hành</p>
+        </div>
+        <div class="stat-card" style="background: rgba(255,255,255,0.15); backdrop-filter: blur(12px); border-radius: 20px; padding: 24px; border: 1px solid rgba(255,255,255,0.2);">
+          <div style="font-size: 32px; margin-bottom: 8px;">⭐</div>
+          <h3 style="font-size: 28px; font-weight: 700; margin-bottom: 4px;">4.8</h3>
+          <p style="font-size: 14px; opacity: 0.8;">Đánh giá trung bình</p>
+        </div>
+        <div class="stat-card" style="background: rgba(255,255,255,0.15); backdrop-filter: blur(12px); border-radius: 20px; padding: 24px; border: 1px solid rgba(255,255,255,0.2);">
+          <div style="font-size: 32px; margin-bottom: 8px;">📅</div>
+          <h3 style="font-size: 28px; font-weight: 700; margin-bottom: 4px;">10k+</h3>
+          <p style="font-size: 14px; opacity: 0.8;">Cuộc hẹn thành công</p>
+        </div>
+        <div class="stat-card" style="background: rgba(255,255,255,0.15); backdrop-filter: blur(12px); border-radius: 20px; padding: 24px; border: 1px solid rgba(255,255,255,0.2);">
+          <div style="font-size: 32px; margin-bottom: 8px;">🏙️</div>
+          <h3 style="font-size: 28px; font-weight: 700; margin-bottom: 4px;">20+</h3>
+          <p style="font-size: 14px; opacity: 0.8;">Thành phố</p>
+        </div>
+      </section>
+
+      <!-- Categories Section -->
+      <section class="categories-section container" style="display: flex; justify-content: center; gap: 16px; margin-bottom: 40px; flex-wrap: wrap;">
+        <div style="background: rgba(0, 122, 255, 0.3); backdrop-filter: blur(8px); padding: 12px 24px; border-radius: 100px; display: flex; align-items: center; gap: 8px; font-weight: 600;"><span style="font-size: 20px;">☕</span> Đi cafe</div>
+        <div style="background: rgba(0, 122, 255, 0.3); backdrop-filter: blur(8px); padding: 12px 24px; border-radius: 100px; display: flex; align-items: center; gap: 8px; font-weight: 600;"><span style="font-size: 20px;">🍽️</span> Ẩm thực</div>
+        <div style="background: rgba(0, 122, 255, 0.3); backdrop-filter: blur(8px); padding: 12px 24px; border-radius: 100px; display: flex; align-items: center; gap: 8px; font-weight: 600;"><span style="font-size: 20px;">🎬</span> Xem phim</div>
+        <div style="background: rgba(0, 122, 255, 0.3); backdrop-filter: blur(8px); padding: 12px 24px; border-radius: 100px; display: flex; align-items: center; gap: 8px; font-weight: 600;"><span style="font-size: 20px;">🚶</span> Dạo phố</div>
+        <div style="background: rgba(0, 122, 255, 0.3); backdrop-filter: blur(8px); padding: 12px 24px; border-radius: 100px; display: flex; align-items: center; gap: 8px; font-weight: 600;"><span style="font-size: 20px;">🏃</span> Thể thao</div>
+        <div style="background: rgba(0, 122, 255, 0.3); backdrop-filter: blur(8px); padding: 12px 24px; border-radius: 100px; display: flex; align-items: center; gap: 8px; font-weight: 600;"><span style="font-size: 20px;">🌍</span> Du lịch</div>
+      </section>
+
+      <!-- Featured Section -->
+      <section class="container" style="margin-bottom: 40px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+          <h2 style="font-size: 24px; font-weight: 700;">⭐ Bạn đồng hành nổi bật</h2>
+          <a href="#" style="color: white; font-size: 14px;">Xem tất cả &rarr;</a>
+        </div>
+        <div class="section-meta" style="margin-bottom: 20px;">
+          <span id="featuredStatus" class="status">Đang tải...</span>
+        </div>
+        <!-- Note: The grid must be 4 columns. We'll set this via inline styles or CSS -->
+        <div id="featuredGrid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;"></div>
+      </section>
+
+      <!-- Quick Actions -->
+      <section class="container" style="margin-bottom: 80px;">
+        <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 24px;">🚀 Thao tác nhanh</h2>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+          <div style="background: white; border-radius: 16px; padding: 20px; display: flex; align-items: center; gap: 16px; color: #1e293b;">
+            <div style="width: 48px; height: 48px; background: rgba(139, 92, 246, 0.8); color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px;">📅</div>
+            <div>
+              <h3 style="font-size: 16px; font-weight: 700;">Lịch hẹn của bạn</h3>
+              <p style="font-size: 13px; color: #64748b; margin-top: 2px;">Xem và quản lý các cuộc hẹn</p>
+            </div>
+          </div>
+          <div style="background: white; border-radius: 16px; padding: 20px; display: flex; align-items: center; gap: 16px; color: #1e293b;">
+            <div style="width: 48px; height: 48px; background: rgba(59, 130, 246, 0.8); color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px;">❤️</div>
+            <div>
+              <h3 style="font-size: 16px; font-weight: 700;">Danh sách yêu thích</h3>
+              <p style="font-size: 13px; color: #64748b; margin-top: 2px;">Những người bạn đã lưu</p>
+            </div>
+          </div>
+          <div style="background: white; border-radius: 16px; padding: 20px; display: flex; align-items: center; gap: 16px; color: #1e293b;">
+            <div style="width: 48px; height: 48px; background: rgba(245, 158, 11, 0.8); color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px;">⭐</div>
+            <div>
+              <h3 style="font-size: 16px; font-weight: 700;">Đánh giá của bạn</h3>
+              <p style="font-size: 13px; color: #64748b; margin-top: 2px;">Xem lại các đánh giá đã viết</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="./js/api.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>
