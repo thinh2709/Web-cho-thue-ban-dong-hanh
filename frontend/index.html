@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Thuê Bạn Đồng Hành - Frontend Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: #F4F7FE;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: center;
+            max-width: 500px;
+        }
+        h1 {
+            color: #1A1A2E;
+            font-weight: 800;
+            margin-bottom: 30px;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 18px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn.outline {
+            background: transparent;
+            border: 2px solid #667EEA;
+            color: #667EEA;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>👋 Xin chào!</h1>
+        <p style="color: #666; margin-bottom: 30px; line-height: 1.6;">Bạn đang chạy hệ thống Frontend bằng Go Live (Live Server). Vui lòng chọn trang giao diện mà bạn muốn mở để kiểm thử:</p>
+        
+        <a href="booking.html" class="btn">🚀 Trang Đặt Lịch (Booking)</a>
+        <a href="appointments.html" class="btn outline">📅 Quản Lý Lịch Hẹn</a>
+    </div>
+</body>
+</html>
