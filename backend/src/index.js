@@ -6,6 +6,7 @@ const port = Number(process.env.PORT) || 3001;
 
 await connectDatabase();
 const app = createApp();
-app.listen(port, () => {
-  console.log(`API lắng nghe tại http://localhost:${port}`);
+app.listen(port, "0.0.0.0", () => {
+  console.log(`API & giao diện: http://localhost:${port}/`);
+  console.log(`Trang chủ: http://localhost:${port}/pages/index.html`);
 });
