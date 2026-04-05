@@ -30,7 +30,8 @@
   const sectionEdit = { basic: false, premium: false };
 
   function apiUrl(path) {
-    return `${window.getApiBase()}${path.startsWith('/') ? path : `/${path}`}`;
+    const p = path.startsWith('/') ? path : `/${path}`;
+    return `${window.getApiBase()}/api${p}`;
   }
 
   function showToast(msg) {
@@ -78,7 +79,12 @@
       data = { message: text };
     }
     if (!res.ok) {
-      const err = new Error((data && data.message) || res.statusText || 'Lỗi mạng');
+      let msg = (data && data.message) || res.statusText || 'Lỗi mạng';
+      if (typeof msg === 'string' && (msg.includes('<!DOCTYPE') || msg.includes('Cannot GET'))) {
+        msg =
+          'Không gọi được API bảng giá. Hãy chạy backend (cổng 3001) và frontend bằng npm run dev (đã cấu hình proxy /api → :3001).';
+      }
+      const err = new Error(msg);
       err.status = res.status;
       err.body = data;
       throw err;

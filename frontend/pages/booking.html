@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đặt lịch - Web cho thuê bạn đồng hành</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
         body,
@@ -20,17 +20,8 @@
             width: 1920px;
             height: 1693px;
             position: relative;
-            background: white;
+            background: transparent;
             overflow: hidden;
-        }
-
-        .background-img {
-            width: 3017px;
-            height: 1693px;
-            left: -432px;
-            top: 0px;
-            position: absolute;
-            object-fit: cover;
         }
 
         .back-button {
@@ -149,9 +140,6 @@
 
 <body>
     <div class="container">
-        <!-- Use the provided background image -->
-        <img class="background-img" src="../99790 1.png" alt="Background" />
-
         <div class="back-button" onclick="window.history.back()">← Quay lại</div>
 
         <div class="header-bg">
@@ -305,32 +293,36 @@
             </div>
         </div>
 
-        <!-- Sidebar Navigation -->
+        <!-- Sidebar Navigation — đồng bộ với trang chủ -->
         <div class="sidebar">
-            <div style="padding-bottom: 20px;"><span style="font-size: 32px;">🌸</span></div>
-            <a href="booking.html" class="sidebar-item active">
+            <a href="/pages/index.html" style="padding-bottom: 20px; text-decoration: none;" title="Trang chủ"><span style="font-size: 32px;">🌸</span></a>
+            <a href="/pages/index.html" class="sidebar-item">
                 <div class="sidebar-icon">📘</div>
                 <div class="sidebar-text">Booking</div>
             </a>
-            <a href="#" class="sidebar-item">
+            <a href="/pages/index.html#discover-search" class="sidebar-item">
                 <div class="sidebar-icon">🔍</div>
                 <div class="sidebar-text">Tìm kiếm</div>
             </a>
-            <a href="appointments.html" class="sidebar-item">
+            <a href="/pages/my-bookings.html" class="sidebar-item">
                 <div class="sidebar-icon">📅</div>
                 <div class="sidebar-text">Lịch hẹn</div>
             </a>
-            <a href="#" class="sidebar-item">
+            <a href="/pages/favorites.html" class="sidebar-item">
                 <div class="sidebar-icon">❤️</div>
                 <div class="sidebar-text">Yêu thích</div>
             </a>
-            <a href="#" class="sidebar-item">
-                <div class="sidebar-icon">⭐</div>
-                <div class="sidebar-text">Đánh giá</div>
+            <a href="/pages/booking.html" class="sidebar-item active">
+                <div class="sidebar-icon">📝</div>
+                <div class="sidebar-text">Đặt lịch</div>
             </a>
-            <a href="#" class="sidebar-item">
+            <a href="/pages/reports.html" class="sidebar-item">
                 <div class="sidebar-icon">📢</div>
                 <div class="sidebar-text">Báo cáo</div>
+            </a>
+            <a href="/pages/profile.html" class="sidebar-item">
+                <div class="sidebar-icon">👤</div>
+                <div class="sidebar-text">Hồ sơ</div>
             </a>
         </div>
     </div>
@@ -354,8 +346,13 @@
         </div>
     </div>
 
-    <script src="js/api.js"></script>
-    <script>
+    <script type="module">
+        import { apiPost, bootstrapUserId, getApiBase } from "/js/api.js";
+
+        const params = new URLSearchParams(window.location.search);
+        const companionKey = params.get("companion") || "";
+        const companionNameFromQuery = params.get("name") || "";
+
         function showToast(type, message, redirectUrl = null) {
             const modal = document.getElementById('toast-modal');
             const content = document.getElementById('toast-content');
@@ -446,6 +443,21 @@
         let selectedService = 'Đi cafe';
         let selectedPrice = 500000;
 
+        async function hydrateCompanionMeta() {
+            try {
+                const res = await fetch(`${getApiBase()}/api/home/featured`);
+                const data = await res.json();
+                const list = data.companions || [];
+                const c = list.find((x) => x.id === companionKey);
+                if (c && c.pricePerHour != null) {
+                    selectedPrice = Number(c.pricePerHour) || selectedPrice;
+                }
+            } catch (e) {
+                console.warn("Không tải giá companion:", e);
+            }
+        }
+        hydrateCompanionMeta();
+
         document.querySelectorAll('.service-option').forEach(option => {
             option.addEventListener('click', function () {
                 // Update UI for all options
@@ -495,29 +507,28 @@
                 return;
             }
 
-            const bookingData = {
-                userId: 'user123', // Placeholder user ID
-                companionId: 'nguyen-thi-lan',
-                companionName: 'Nguyễn Thị Lan',
-                date: dateInput,
-                startTime: startTimeInput,
-                endTime: endTimeInput,
+            const startIso = new Date(`${dateInput}T${startTimeInput}:00`).toISOString();
+            const endIso = new Date(`${dateInput}T${endTimeInput}:00`).toISOString();
+            const note = (document.querySelector("textarea")?.value ?? "").trim();
+            const isMongoId = /^[a-f0-9]{24}$/i.test(companionKey);
+            const body = {
+                companionName: companionNameFromQuery || "Bạn đồng hành",
+                companionId: isMongoId ? companionKey : undefined,
+                staticCompanionKey: companionKey && !isMongoId ? companionKey : undefined,
+                start: startIso,
+                end: endIso,
+                note,
+                totalPrice: Math.round(selectedPrice * diffInHours),
                 service: selectedService,
-                totalPrice: selectedPrice * diffInHours,
-                notes: document.querySelector('textarea').value
             };
 
             try {
-                console.log('Đang gửi yêu cầu đặt lịch:', bookingData);
-                const result = await api.createBooking(bookingData);
-                if (result.booking) {
-                    showToast('success', 'Đặt lịch thành công! Hệ thống đang chuyển hướng...', 'appointments.html');
-                } else {
-                    showToast('error', result.message || 'Lỗi không xác định từ máy chủ.');
-                }
+                await bootstrapUserId();
+                await apiPost("/api/bookings", body);
+                showToast("success", "Đặt lịch thành công! Hệ thống đang chuyển hướng...", "/pages/my-bookings.html");
             } catch (error) {
                 console.error("Lỗi khi gọi API:", error);
-                showToast('error', 'Có lỗi xảy ra khi kết nối máy chủ. Vui lòng thử lại sau.');
+                showToast("error", error.message || "Có lỗi xảy ra khi kết nối máy chủ. Vui lòng thử lại sau.");
             }
         });
 

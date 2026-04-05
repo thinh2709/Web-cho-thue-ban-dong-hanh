@@ -15,6 +15,12 @@ const bookingSchema = new mongoose.Schema(
       default: "pending",
     },
     note: { type: String, default: "" },
+    /** Giá đã thống nhất khi đặt (VND). */
+    totalPrice: { type: Number, min: 0 },
+    /** Tên gói / dịch vụ hiển thị ở FE. */
+    service: { type: String, default: "" },
+    /** Id companion tĩnh (vd. c1, c2) khi chưa gắn User Mongo. */
+    staticCompanionKey: { type: String, default: "" },
   },
   { timestamps: true }
 );

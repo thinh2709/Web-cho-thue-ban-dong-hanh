@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quản lý hồ sơ — Thuê bạn đồng hành</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body class="page-profile">
+    <div class="profile-shell">
+      <aside class="profile-rail" aria-label="Ứng dụng">
+        <a class="profile-rail__logo" href="/pages/index.html" title="Trang chủ">🌸</a>
+        <nav class="profile-rail__nav" aria-label="Chính">
+          <a class="profile-rail__link" href="/pages/index.html">
+            <span class="profile-rail__icon" aria-hidden="true">📘</span>
+            <span class="profile-rail__label">Booking</span>
+          </a>
+          <a class="profile-rail__link" href="/pages/index.html#discover-search">
+            <span class="profile-rail__icon" aria-hidden="true">🔍</span>
+            <span class="profile-rail__label">Tìm kiếm</span>
+          </a>
+          <a class="profile-rail__link" href="/pages/my-bookings.html">
+            <span class="profile-rail__icon" aria-hidden="true">📅</span>
+            <span class="profile-rail__label">Lịch hẹn</span>
+          </a>
+          <a class="profile-rail__link" href="/pages/favorites.html">
+            <span class="profile-rail__icon" aria-hidden="true">❤️</span>
+            <span class="profile-rail__label">Yêu thích</span>
+          </a>
+          <a class="profile-rail__link" href="/pages/booking.html">
+            <span class="profile-rail__icon" aria-hidden="true">📝</span>
+            <span class="profile-rail__label">Đặt lịch</span>
+          </a>
+          <a class="profile-rail__link" href="/pages/reports.html">
+            <span class="profile-rail__icon" aria-hidden="true">📢</span>
+            <span class="profile-rail__label">Báo cáo</span>
+          </a>
+          <a class="profile-rail__link profile-rail__link--active" href="/pages/profile.html" aria-current="page">
+            <span class="profile-rail__icon" aria-hidden="true">👤</span>
+            <span class="profile-rail__label">Hồ sơ</span>
+          </a>
+        </nav>
+      </aside>
+
+      <div class="profile-workspace">
+        <div class="profile-workspace__bg" aria-hidden="true"></div>
+        <div class="profile-workspace__inner">
+          <h1 class="profile-page-title">👤 Quản lý hồ sơ</h1>
+
+          <form id="profile-form" class="profile-layout profile-layout--simple" novalidate>
+            <aside class="profile-summary glass-panel-profile" aria-label="Tóm tắt hồ sơ">
+              <div class="profile-summary__avatar-wrap">
+                <div class="profile-summary__avatar-ring">
+                  <img
+                    id="avatar-preview"
+                    class="profile-summary__avatar-img"
+                    alt=""
+                    width="120"
+                    height="120"
+                    hidden
+                  />
+                  <span id="avatar-fallback" class="profile-summary__avatar-fallback" aria-hidden="true">👩</span>
+                </div>
+                <button type="button" class="profile-summary__camera" id="avatar-camera-btn" title="Đổi ảnh (URL)">
+                  📷
+                </button>
+              </div>
+              <h2 id="profile-display-name" class="profile-summary__name">—</h2>
+              <span class="profile-summary__verified">✓ Đã xác thực</span>
+              <span id="profile-demo-badge" class="profile-summary__demo" hidden>Tài khoản demo</span>
+
+              <label class="profile-summary__avatar-url-field">
+                <span class="visually-hidden">URL ảnh đại diện</span>
+                <input
+                  class="profile-summary__avatar-input"
+                  name="avatar"
+                  type="url"
+                  placeholder="https://… ảnh đại diện"
+                  maxlength="2000"
+                  autocomplete="off"
+                />
+              </label>
+            </aside>
+
+            <section class="profile-detail glass-panel-profile" aria-labelledby="profile-detail-heading">
+              <header class="profile-detail__head">
+                <h2 id="profile-detail-heading" class="profile-detail__title">Thông tin cá nhân</h2>
+                <button type="button" class="profile-detail__edit" id="profile-edit-btn">✏️ Chỉnh sửa</button>
+              </header>
+
+              <div class="profile-detail__body">
+                <div class="profile-form-grid profile-form-grid--2">
+                  <label class="profile-field">
+                    <span class="profile-field__label">Họ và tên</span>
+                    <input
+                      class="profile-field__input"
+                      name="fullName"
+                      type="text"
+                      autocomplete="name"
+                      maxlength="120"
+                    />
+                  </label>
+                  <label class="profile-field">
+                    <span class="profile-field__label">Ngày sinh</span>
+                    <input class="profile-field__input" name="birthDate" type="date" />
+                  </label>
+                  <label class="profile-field">
+                    <span class="profile-field__label">Số điện thoại</span>
+                    <input
+                      class="profile-field__input"
+                      name="phone"
+                      type="tel"
+                      autocomplete="tel"
+                      maxlength="20"
+                    />
+                  </label>
+                  <label class="profile-field">
+                    <span class="profile-field__label">Địa chỉ</span>
+                    <input class="profile-field__input" name="address" type="text" maxlength="300" />
+                  </label>
+                </div>
+                <label class="profile-field profile-field--full">
+                  <span class="profile-field__label">Giới thiệu</span>
+                  <textarea
+                    class="profile-field__textarea"
+                    name="bio"
+                    rows="4"
+                    maxlength="2000"
+                    placeholder="Giới thiệu ngắn về bạn…"
+                  ></textarea>
+                </label>
+
+                <div class="profile-field profile-field--full">
+                  <span class="profile-field__label" id="hobbies-label">Sở thích</span>
+                  <div class="profile-hobbies" role="group" aria-labelledby="hobbies-label">
+                    <div id="hobbies-chips" class="profile-hobbies__chips"></div>
+                    <div class="profile-hobbies__add">
+                      <input
+                        id="hobby-new"
+                        class="profile-hobbies__add-input"
+                        type="text"
+                        maxlength="80"
+                        placeholder="Thêm sở thích…"
+                        aria-label="Thêm sở thích"
+                      />
+                      <button type="button" class="profile-hobbies__add-btn" id="hobby-add-btn">Thêm</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="profile-detail__actions">
+                  <button class="profile-save-btn" type="submit">💾 Lưu thay đổi</button>
+                </div>
+                <p id="profile-message" class="form-message profile-form-message" role="status"></p>
+              </div>
+            </section>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/js/profile.js"></script>
+  </body>
+</html>

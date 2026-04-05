@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Đăng Nhập</title>
+    <title>Đăng Ký</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -25,19 +25,24 @@
         margin: 0;
         min-height: 100vh;
         font-family: Roboto, system-ui, -apple-system, Segoe UI, Arial, sans-serif;
-        background: var(--bg);
+        background: #0f172a;
         color: var(--white);
         overflow-x: hidden;
       }
       .bg {
         position: fixed;
         inset: 0;
-        background:
-          linear-gradient(180deg, rgba(45, 129, 201, 0.7), rgba(45, 129, 201, 0.7)),
-          url("./assets/99790%201.png");
-        background-size: cover;
-        background-position: center;
-        transform: scale(1.02);
+        z-index: 0;
+        background-image: linear-gradient(
+            to bottom,
+            rgba(15, 23, 42, 0.42),
+            rgba(15, 23, 42, 0.68)
+          ),
+          url("/assets/99790-1.png");
+        background-size: cover, cover;
+        background-position: center, center;
+        background-attachment: fixed, fixed;
+        background-repeat: no-repeat, no-repeat;
       }
       .page {
         position: relative;
@@ -53,20 +58,19 @@
         background: var(--glass);
         backdrop-filter: blur(78px);
         -webkit-backdrop-filter: blur(78px);
-        padding: 56px 52px 44px;
+        padding: 52px 52px 40px;
         box-shadow:
           inset -35px 35px 35px rgba(255, 255, 255, 0.105),
           inset 35px -35px 35px rgba(165, 165, 165, 0.105);
       }
       h1 {
-        margin: 0 0 28px;
+        margin: 0 0 22px;
         font-size: 32px;
         font-weight: 700;
         text-align: center;
-        letter-spacing: 0;
       }
       .field {
-        margin-top: 22px;
+        margin-top: 18px;
       }
       .field-label {
         display: flex;
@@ -93,33 +97,19 @@
         margin-top: 4px;
       }
       .row {
-        margin-top: 18px;
+        margin-top: 16px;
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        font-size: 16px;
-      }
-      .checkbox {
-        display: inline-flex;
-        align-items: center;
         gap: 10px;
-        user-select: none;
+        font-size: 16px;
       }
       .checkbox input {
         width: 18px;
         height: 18px;
         accent-color: #ffffff;
       }
-      .link {
-        color: #ffffff;
-        text-decoration: none;
-      }
-      .link:hover {
-        text-decoration: underline;
-      }
       .btn {
-        margin-top: 26px;
+        margin-top: 22px;
         width: 100%;
         height: 42px;
         border-radius: 10px;
@@ -131,13 +121,20 @@
         font-weight: 700;
       }
       .hint {
-        margin-top: 20px;
-        text-align: center;
+        margin-top: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
         font-size: 20px;
         font-weight: 600;
       }
-      .hint a {
-        font-weight: 700;
+      .link {
+        color: #ffffff;
+        text-decoration: none;
+      }
+      .link:hover {
+        text-decoration: underline;
       }
       .error {
         margin-top: 14px;
@@ -152,8 +149,16 @@
   <body>
     <div class="bg" aria-hidden="true"></div>
     <div class="page">
-      <form class="card" id="loginForm">
-        <h1>Đăng Nhập</h1>
+      <form class="card" id="registerForm">
+        <h1>Đăng Ký</h1>
+
+        <div class="field">
+          <div class="field-label">
+            <span>Tên</span>
+          </div>
+          <input name="name" type="text" autocomplete="name" required />
+          <div class="underline"></div>
+        </div>
 
         <div class="field">
           <div class="field-label">
@@ -167,52 +172,42 @@
           <div class="field-label">
             <span>Mật Khẩu</span>
           </div>
-          <input name="password" type="password" autocomplete="current-password" required />
+          <input name="password" type="password" autocomplete="new-password" required />
           <div class="underline"></div>
         </div>
 
-        <div class="row">
-          <label class="checkbox">
-            <input type="checkbox" name="remember" />
-            <span>Hãy Nhớ tôi</span>
-          </label>
-          <a class="link" href="#" id="forgotLink">Quên Mật Khẩu?</a>
-        </div>
+        <label class="row checkbox">
+          <input type="checkbox" name="terms" required />
+          <span>I agree to the terms &amp; conditions</span>
+        </label>
 
-        <button class="btn" type="submit">Đăng Nhập</button>
+        <button class="btn" type="submit">Đăng Ký</button>
         <div class="error" id="errorText"></div>
 
         <div class="hint">
-          <span>Không có tài khoản? </span>
-          <a class="link" href="./register.html">Đăng Ký</a>
+          <span>Đã Có tài khoản?</span>
+          <a class="link" href="./login.html">Đăng Nhập</a>
         </div>
       </form>
     </div>
 
     <script src="./js/api.js"></script>
     <script>
-      const form = document.getElementById("loginForm");
+      const form = document.getElementById("registerForm");
       const errorText = document.getElementById("errorText");
-      const forgotLink = document.getElementById("forgotLink");
-
-      forgotLink.addEventListener("click", (e) => {
-        e.preventDefault();
-        alert("Chức năng quên mật khẩu chưa được triển khai trong nhánh này.");
-      });
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
         errorText.textContent = "";
 
         const formData = new FormData(form);
+        const name = String(formData.get("name") || "").trim();
         const email = String(formData.get("email") || "").trim();
         const password = String(formData.get("password") || "");
-        const remember = Boolean(formData.get("remember"));
 
         try {
-          const data = await window.api.login({ email, password });
-          window.api.setToken(data.token, remember);
-
+          const data = await window.api.register({ name, email, password });
+          window.api.setToken(data.token, true);
           window.location.href = "./index.html";
         } catch (err) {
           errorText.textContent = err?.message || "Có lỗi xảy ra";

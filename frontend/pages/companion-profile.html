@@ -4,16 +4,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Quản lý hồ sơ</title>
-    <link rel="stylesheet" href="./css/styles.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
   </head>
   <body>
     <div class="page">
       <aside class="sidebar">
-        <div class="sidebar__brand">💼</div>
-        <a class="nav-link" data-nav="profile" href="./companion-profile.html" title="Hồ sơ">👤</a>
-        <a class="nav-link" data-nav="calendar" href="./companion-profile.html" title="Lịch">🗓️</a>
-        <a class="nav-link" data-nav="requests" href="./companion-profile.html" title="Yêu cầu">📬</a>
-        <a class="nav-link" data-nav="earnings" href="./earnings.html" title="Thu nhập">💰</a>
+        <a class="sidebar__brand" href="/pages/index.html" title="Về trang khách" style="text-decoration: none">🌸</a>
+        <a class="nav-link" data-nav="profile" href="/pages/companion-profile.html" title="Hồ sơ">👤</a>
+        <a class="nav-link" data-nav="calendar" href="/pages/companion-profile.html" title="Lịch">🗓️</a>
+        <a class="nav-link" data-nav="requests" href="/pages/companion-profile.html" title="Yêu cầu">📬</a>
+        <a class="nav-link" data-nav="earnings" href="/pages/earnings.html" title="Thu nhập">💰</a>
         <div style="flex: 1"></div>
         <div class="sidebar__brand">💬</div>
       </aside>
@@ -94,8 +94,8 @@
     </div>
 
     <script type="module">
-      import { apiFetch } from "./js/api.js";
-      import { setActiveNav, setStatus } from "./js/app.js";
+      import { apiFetch } from "/js/api.js";
+      import { setActiveNav, setStatus } from "/js/app.js";
 
       setActiveNav("profile");
 

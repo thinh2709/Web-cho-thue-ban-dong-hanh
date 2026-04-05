@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Booking — Tìm bạn đồng hành</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body class="page-discover">
+    <div class="discover-page">
+      <aside class="discover-sidebar" aria-label="Điều hướng">
+        <a class="discover-sidebar__brand" href="/pages/index.html" title="Trang chủ">🌸</a>
+        <nav class="discover-sidebar__nav" aria-label="Chính">
+          <a class="discover-sidebar__item discover-sidebar__item--active" href="/pages/index.html" aria-current="page">
+            <span class="discover-sidebar__icon" aria-hidden="true">📘</span>
+            <span class="discover-sidebar__label">Booking</span>
+          </a>
+          <a class="discover-sidebar__item" href="/pages/index.html#discover-search">
+            <span class="discover-sidebar__icon" aria-hidden="true">🔍</span>
+            <span class="discover-sidebar__label">Tìm kiếm</span>
+          </a>
+          <a class="discover-sidebar__item" href="/pages/my-bookings.html">
+            <span class="discover-sidebar__icon" aria-hidden="true">📅</span>
+            <span class="discover-sidebar__label">Lịch hẹn</span>
+          </a>
+          <a class="discover-sidebar__item" href="/pages/favorites.html">
+            <span class="discover-sidebar__icon" aria-hidden="true">❤️</span>
+            <span class="discover-sidebar__label">Yêu thích</span>
+          </a>
+          <a class="discover-sidebar__item" href="/pages/booking.html">
+            <span class="discover-sidebar__icon" aria-hidden="true">📝</span>
+            <span class="discover-sidebar__label">Đặt lịch</span>
+          </a>
+          <a class="discover-sidebar__item" href="/pages/reports.html">
+            <span class="discover-sidebar__icon" aria-hidden="true">📢</span>
+            <span class="discover-sidebar__label">Báo cáo</span>
+          </a>
+        </nav>
+      </aside>
+
+      <main class="discover-main">
+        <header class="discover-header">
+          <div class="discover-header__brand">
+            <span class="discover-header__logo" aria-hidden="true">📘</span>
+            <span class="discover-header__title">Booking</span>
+          </div>
+          <a class="discover-header__profile" href="/pages/profile.html" title="Hồ sơ">👤</a>
+        </header>
+
+        <form id="discover-search" class="discover-panel" action="/pages/index.html" method="get" role="search">
+          <div class="discover-search-row">
+            <label class="visually-hidden" for="discover-q">Tìm kiếm</label>
+            <input
+              id="discover-q"
+              class="discover-search-row__input"
+              type="search"
+              name="q"
+              placeholder="Tìm kiếm bạn đồng hành..."
+              autocomplete="off"
+            />
+            <button class="discover-search-row__btn" type="submit">🔍 Tìm kiếm</button>
+          </div>
+          <div class="discover-filters">
+            <label class="discover-filter">
+              <span class="discover-filter__label">📍 Vị trí</span>
+              <select class="discover-filter__control" name="location">
+                <option>Tất cả</option>
+                <option>Hà Nội</option>
+                <option>TP. HCM</option>
+                <option>Đà Nẵng</option>
+              </select>
+            </label>
+            <label class="discover-filter">
+              <span class="discover-filter__label">💝 Sở thích</span>
+              <select class="discover-filter__control" name="hobby">
+                <option>Tất cả</option>
+                <option>Du lịch</option>
+                <option>Ẩm thực</option>
+                <option>Thể thao</option>
+              </select>
+            </label>
+            <label class="discover-filter">
+              <span class="discover-filter__label">👤 Giới tính</span>
+              <select class="discover-filter__control" name="gender">
+                <option>Tất cả</option>
+                <option>Nam</option>
+                <option>Nữ</option>
+              </select>
+            </label>
+            <label class="discover-filter">
+              <span class="discover-filter__label">🎂 Độ tuổi</span>
+              <select class="discover-filter__control" name="age">
+                <option>Tất cả</option>
+                <option>18–25</option>
+                <option>26–35</option>
+                <option>36+</option>
+              </select>
+            </label>
+            <label class="discover-filter">
+              <span class="discover-filter__label">💰 Mức giá</span>
+              <select class="discover-filter__control" name="price">
+                <option>Tất cả</option>
+                <option>Dưới 500k/h</option>
+                <option>500k–700k/h</option>
+                <option>Trên 700k/h</option>
+              </select>
+            </label>
+          </div>
+        </form>
+
+        <div class="discover-toolbar">
+          <p class="discover-toolbar__count">Tìm thấy <strong>—</strong> bạn đồng hành</p>
+          <div class="discover-sort">
+            <label class="discover-sort__label" for="discover-sort-select">Sắp xếp:</label>
+            <select id="discover-sort-select" class="discover-sort__select" aria-label="Sắp xếp kết quả">
+              <option>Phổ biến nhất</option>
+              <option>Giá thấp đến cao</option>
+              <option>Đánh giá cao nhất</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="discover-grid" role="list" aria-busy="true" aria-label="Danh sách bạn đồng hành">
+          <p class="discover-grid__loading muted">Đang tải danh sách…</p>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="/js/app.js"></script>
+  </body>
+</html>
