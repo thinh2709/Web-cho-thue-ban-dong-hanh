@@ -1,3 +1,6 @@
+# Stack khi chỉ có image trên Docker Hub (không cần source để build).
+# Image/tag mặc định khớp nhánh develop (GitHub Actions đẩy tag tên nhánh, ví dụ develop).
+# Nhánh mặc định của repo thường còn có tag latest — đổi :develop thành :latest nếu cần.
 
 services:
   mongo:
@@ -15,7 +18,7 @@ services:
       start_period: 10s
 
   app:
-    build: .
+    image: thinh2709/web-cho-thue-ban-dong-hanh:develop
     restart: unless-stopped
     networks:
       - thue-net
