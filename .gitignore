@@ -26,5 +26,5 @@ build/
 *.swp
 *.swo
 
-# MongoDB local (nếu dùng)
-data/
+# MongoDB local ở gốc repo (không khớp backend/src/data/)
+/data/
