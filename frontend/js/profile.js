@@ -64,55 +64,6 @@ function addHobby() {
   renderHobbies();
 }
 
-function getGallery() {
-  return [0, 1, 2, 3]
-    .map((i) => form.querySelector(`input[name="gallery${i}"]`)?.value?.trim())
-    .filter(Boolean);
-}
-
-function setGalleryInputs(gallery) {
-  for (let i = 0; i < 4; i++) {
-    const el = form.querySelector(`input[name="gallery${i}"]`);
-    if (el) el.value = gallery[i] ?? "";
-  }
-  syncGalleryPreviews();
-}
-
-function syncGalleryPreviews() {
-  for (let i = 0; i < 4; i++) {
-    const input = form.querySelector(`input[name="gallery${i}"]`);
-    if (!input) continue;
-    const slot = input.closest(".profile-gallery__slot");
-    if (!slot) continue;
-    const thumb = slot.querySelector(".profile-gallery__thumb");
-    const emoji = slot.querySelector(".profile-gallery__emoji");
-    if (!thumb || !emoji) continue;
-    const url = input.value.trim();
-    if (url) {
-      thumb.onerror = () => {
-        thumb.hidden = true;
-        emoji.hidden = false;
-      };
-      thumb.onload = () => {
-        thumb.hidden = false;
-        emoji.hidden = true;
-      };
-      if (thumb.src === url && thumb.complete && thumb.naturalWidth > 0) {
-        thumb.hidden = false;
-        emoji.hidden = true;
-      } else {
-        thumb.src = url;
-      }
-    } else {
-      thumb.onload = null;
-      thumb.onerror = null;
-      thumb.removeAttribute("src");
-      thumb.hidden = true;
-      emoji.hidden = false;
-    }
-  }
-}
-
 function normalizeBirthForInput(v) {
   if (!v || typeof v !== "string") return "";
   if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
@@ -125,27 +76,10 @@ function normalizeBirthForInput(v) {
   return "";
 }
 
-document.querySelectorAll(".profile-summary__mininav-link").forEach((link) => {
-  link.addEventListener("click", (e) => {
-    const href = link.getAttribute("href");
-    if (href?.startsWith("#")) {
-      e.preventDefault();
-      const t = document.querySelector(href);
-      t?.scrollIntoView({ behavior: "smooth", block: "start" });
-      document.querySelectorAll(".profile-summary__mininav-link").forEach((l) => l.classList.remove("is-active"));
-      link.classList.add("is-active");
-    }
-  });
-});
-
 cameraBtn?.addEventListener("click", () => form.avatar?.focus());
 editBtn?.addEventListener("click", () => form.fullName?.focus());
 
 form.avatar?.addEventListener("input", () => setPreview(form.avatar.value.trim()));
-
-for (let i = 0; i < 4; i++) {
-  form.querySelector(`input[name="gallery${i}"]`)?.addEventListener("input", syncGalleryPreviews);
-}
 
 hobbyAddBtn?.addEventListener("click", addHobby);
 hobbyNew?.addEventListener("keydown", (e) => {
@@ -172,7 +106,6 @@ async function load() {
   form.bio.value = me.bio ?? "";
   hobbiesList = Array.isArray(me.hobbies) ? [...me.hobbies] : [];
   renderHobbies();
-  setGalleryInputs(me.gallery ?? []);
   setPreview(form.avatar.value.trim());
   if (displayName) displayName.textContent = (me.fullName && me.fullName.trim()) || "—";
   if (demoBadge) demoBadge.hidden = !me.isDemo;
@@ -183,6 +116,7 @@ form.addEventListener("submit", async (e) => {
   showMessage("");
   try {
     await bootstrapUser();
+    const current = await apiGet("/api/users/me");
     await apiPatch("/api/users/me", {
       fullName: form.fullName.value.trim(),
       phone: form.phone.value.trim(),
@@ -191,7 +125,7 @@ form.addEventListener("submit", async (e) => {
       address: form.address.value.trim(),
       bio: form.bio.value.trim(),
       hobbies: hobbiesList,
-      gallery: getGallery(),
+      gallery: Array.isArray(current.gallery) ? current.gallery : [],
     });
     if (displayName) displayName.textContent = form.fullName.value.trim() || "—";
     showMessage("Đã lưu hồ sơ.");

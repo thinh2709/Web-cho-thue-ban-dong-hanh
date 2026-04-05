@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yêu thích – Thuê bạn đồng hành</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body class="page-booking">
+    <div class="app-layout">
+      <aside class="app-sidebar" aria-label="Điều hướng">
+        <a class="app-sidebar__logo" href="/pages/index.html" title="Trang chủ">🌸</a>
+        <nav class="app-sidebar__nav" aria-label="Chính">
+          <a class="app-sidebar__link" href="/pages/index.html" title="Booking">📘</a>
+          <a class="app-sidebar__link" href="/pages/index.html#discover-search" title="Tìm kiếm">🔍</a>
+          <a class="app-sidebar__link" href="/pages/my-bookings.html" title="Lịch hẹn">📅</a>
+          <a class="app-sidebar__link" href="/pages/favorites.html" aria-current="page" title="Yêu thích">❤️</a>
+          <a class="app-sidebar__link" href="/pages/booking.html" title="Đặt lịch">📝</a>
+          <a class="app-sidebar__link" href="/pages/reports.html" title="Báo cáo">📢</a>
+          <a class="app-sidebar__link" href="/pages/profile.html" title="Hồ sơ">👤</a>
+        </nav>
+      </aside>
+      <div class="app-main">
+        <header class="booking-hero">
+          <div class="booking-hero__inner">
+            <h1 class="booking-hero__title">
+              <span class="booking-hero__icon" aria-hidden="true">❤️</span>
+              Danh sách yêu thích
+            </h1>
+            <p id="favoritesSubtitle" class="lead lead--on-dark" style="margin-bottom: 0.5rem">
+              Bạn có 0 bạn đồng hành yêu thích
+            </p>
+            <p id="favoritesStatus" class="form-message" role="status" style="margin-top: 0">Đang tải…</p>
+          </div>
+        </header>
+        <div class="app-main__inner">
+          <div id="favoritesEmpty" class="favorites-empty" hidden>
+            <p class="favorites-empty__title">Chưa có mục yêu thích</p>
+            <p class="favorites-empty__sub lead" style="opacity: 0.9">
+              Quay lại trang chủ để thêm bạn đồng hành vào danh sách.
+            </p>
+            <a class="btn btn--primary" href="/pages/index.html">← Về trang chủ</a>
+          </div>
+          <div id="favoritesList" class="favorites-grid"></div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/js/favorites.js"></script>
+  </body>
+</html>

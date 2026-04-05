@@ -30,22 +30,17 @@
         min-height: 100vh;
         font-family: var(--font);
         color: #111827;
-      }
-
-      .page-bg {
-        position: fixed;
-        inset: 0;
-        z-index: 0;
-        background: linear-gradient(135deg, rgb(240, 147, 251) 0%, rgb(245, 87, 108) 50%, rgb(240, 147, 251) 100%);
-      }
-
-      .page-bg img {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        opacity: 0.78;
+        background-color: #0f172a;
+        background-image: linear-gradient(
+            to bottom,
+            rgba(15, 23, 42, 0.45),
+            rgba(15, 23, 42, 0.72)
+          ),
+          url("/assets/99790-1.png");
+        background-size: cover, cover;
+        background-position: center, center;
+        background-attachment: fixed, fixed;
+        background-repeat: no-repeat, no-repeat;
       }
 
       .layout {
@@ -359,16 +354,17 @@
     </style>
   </head>
   <body>
-    <div class="page-bg" aria-hidden="true">
-      <img src="https://www.figma.com/api/mcp/asset/cf904793-f043-4069-a97c-217e53614452" alt="" />
-    </div>
     <div class="layout">
       <aside class="sidebar" aria-label="Điều hướng">
-        <a href="reports.html" class="active" title="Thống kê">
+        <a href="/pages/index.html" title="Ứng dụng">
+          <span class="icon" aria-hidden="true">🌸</span>
+          <span>Trang chủ</span>
+        </a>
+        <a href="/pages/reports.html" class="active" title="Thống kê">
           <span class="icon" aria-hidden="true">💰</span>
           <span>Thu nhập</span>
         </a>
-        <a href="pricing.html" title="Giá cả">
+        <a href="/pages/pricing.html" title="Giá cả">
           <span class="icon" aria-hidden="true">🏷️</span>
           <span>Giá cả</span>
         </a>
@@ -419,7 +415,7 @@
       </main>
     </div>
 
-    <script src="../js/api.js"></script>
-    <script src="../js/reports.js"></script>
+    <script type="module" src="/js/api.js"></script>
+    <script defer src="/js/reports.js"></script>
   </body>
 </html>

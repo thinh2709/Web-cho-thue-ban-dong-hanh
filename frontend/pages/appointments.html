@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý lịch hẹn - Web cho thuê bạn đồng hành</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body, html {
@@ -17,16 +17,8 @@
             width: 1920px;
             height: 1215px;
             position: relative;
-            background: white;
+            background: transparent;
             overflow: hidden;
-        }
-        .background-img {
-            width: 3108px;
-            height: 1744px;
-            left: -470px;
-            top: 0px;
-            position: absolute;
-            object-fit: cover;
         }
         .sidebar {
             width: 115px;
@@ -198,35 +190,36 @@
 </head>
 <body>
     <div class="container">
-        <!-- Use the provided background image -->
-        <img class="background-img" src="../99790 1.png" alt="Background" />
-
-        <!-- Sidebar Navigation -->
+        <!-- Sidebar Navigation — đồng bộ với trang chủ -->
         <div class="sidebar">
-            <div style="padding-bottom: 20px;"><span style="font-size: 32px;">🌸</span></div>
-            <a href="booking.html" class="sidebar-item">
+            <a href="/pages/index.html" style="padding-bottom: 20px; text-decoration: none;" title="Trang chủ"><span style="font-size: 32px;">🌸</span></a>
+            <a href="/pages/index.html" class="sidebar-item">
                 <div class="sidebar-icon">📘</div>
                 <div class="sidebar-text">Booking</div>
             </a>
-            <a href="#" class="sidebar-item">
+            <a href="/pages/index.html#discover-search" class="sidebar-item">
                 <div class="sidebar-icon">🔍</div>
                 <div class="sidebar-text">Tìm kiếm</div>
             </a>
-            <a href="appointments.html" class="sidebar-item active">
+            <a href="/pages/appointments.html" class="sidebar-item active">
                 <div class="sidebar-icon">📅</div>
                 <div class="sidebar-text">Lịch hẹn</div>
             </a>
-            <a href="#" class="sidebar-item">
+            <a href="/pages/favorites.html" class="sidebar-item">
                 <div class="sidebar-icon">❤️</div>
                 <div class="sidebar-text">Yêu thích</div>
             </a>
-            <a href="#" class="sidebar-item">
-                <div class="sidebar-icon">⭐</div>
-                <div class="sidebar-text">Đánh giá</div>
+            <a href="/pages/booking.html" class="sidebar-item">
+                <div class="sidebar-icon">📝</div>
+                <div class="sidebar-text">Đặt lịch</div>
             </a>
-            <a href="#" class="sidebar-item">
+            <a href="/pages/reports.html" class="sidebar-item">
                 <div class="sidebar-icon">📢</div>
                 <div class="sidebar-text">Báo cáo</div>
+            </a>
+            <a href="/pages/profile.html" class="sidebar-item">
+                <div class="sidebar-icon">👤</div>
+                <div class="sidebar-text">Hồ sơ</div>
             </a>
         </div>
 
@@ -248,86 +241,138 @@
         </div>
     </div>
 
-    <script src="js/api.js"></script>
-    <script>
-        const appointmentListElem = document.querySelector('.appointment-list');
-        const filterItems = document.querySelectorAll('.filter-item');
+    <script type="module">
+        import { apiGet, apiPatch, bootstrapUserId } from "/js/api.js";
 
-        async function loadAppointments(status = '') {
+        const appointmentListElem = document.querySelector(".appointment-list");
+        const filterItems = document.querySelectorAll(".filter-item");
+
+        function mapBooking(b) {
+            const s = new Date(b.start);
+            const e = new Date(b.end);
+            const price =
+                b.totalPrice != null && Number.isFinite(Number(b.totalPrice))
+                    ? Number(b.totalPrice)
+                    : 0;
+            return {
+                _id: b._id,
+                companionName: b.companionName || "Bạn đồng hành",
+                date: s,
+                startTime: s.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }),
+                endTime: e.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }),
+                service: b.service || "—",
+                totalPrice: price,
+                status: b.status,
+            };
+        }
+
+        let activeFilter = "";
+
+        async function loadAppointments(status = "") {
             try {
-                // For demo purposes, we'll use 'user123' as the placeholder userId
-                const appointments = await api.getBookings('user123', status);
-                renderAppointments(appointments);
+                await bootstrapUserId();
+                const rows = await apiGet("/api/users/me/bookings");
+                let list = rows.map(mapBooking);
+                if (status === "confirmed") {
+                    list = list.filter((a) => a.status === "confirmed");
+                } else if (status) {
+                    list = list.filter((a) => a.status === status);
+                }
+                renderAppointments(list);
             } catch (error) {
-                console.error('Failed to load appointments:', error);
+                console.error("Failed to load appointments:", error);
+                appointmentListElem.innerHTML =
+                    '<div style="color: white; font-size: 24px; text-align: center; margin-top: 50px;">Không tải được lịch hẹn.</div>';
             }
         }
 
         function renderAppointments(appointments) {
             if (appointments.length === 0) {
-                appointmentListElem.innerHTML = '<div style="color: white; font-size: 24px; text-align: center; margin-top: 50px;">Bạn chưa có lịch hẹn nào.</div>';
+                appointmentListElem.innerHTML =
+                    '<div style="color: white; font-size: 24px; text-align: center; margin-top: 50px;">Bạn chưa có lịch hẹn nào.</div>';
                 return;
             }
 
-            appointmentListElem.innerHTML = appointments.map(app => `
+            appointmentListElem.innerHTML = appointments
+                .map(
+                    (app) => `
                 <div class="appointment-card">
-                    <div class="avatar">${app.companionName.includes('Lan') ? '👩' : '👨'}</div>
+                    <div class="avatar">${app.companionName.includes("Lan") ? "👩" : "👨"}</div>
                     <div class="info-main">
                         <div class="name">${app.companionName}</div>
                         <div class="details">
-                            <span>📅 ${new Date(app.date).toLocaleDateString('vi-VN')}</span>
+                            <span>📅 ${app.date.toLocaleDateString("vi-VN")}</span>
                             <span>🕐 ${app.startTime} - ${app.endTime}</span>
                             <span>${app.service}</span>
-                            <span>💰 ${app.totalPrice.toLocaleString('vi-VN')}đ</span>
+                            <span>💰 ${app.totalPrice.toLocaleString("vi-VN")}đ</span>
                             <span class="status-badge status-${app.status}">
-                                ${app.status === 'confirmed' ? '✓ Đã xác nhận' : 
-                                  app.status === 'pending' ? '⏳ Chờ xác nhận' : 
-                                  app.status === 'completed' ? '✓ Hoàn thành' : '✕ Đã hủy'}
+                                ${
+                                  app.status === "confirmed"
+                                    ? "✓ Đã xác nhận"
+                                    : app.status === "pending"
+                                      ? "⏳ Chờ xác nhận"
+                                      : app.status === "completed"
+                                        ? "✓ Hoàn thành"
+                                        : "✕ Đã hủy"
+                                }
                             </span>
                         </div>
                     </div>
                     <div class="actions">
-                        ${app.status === 'pending' || app.status === 'confirmed' ? `
+                        ${
+                          app.status === "pending" || app.status === "confirmed"
+                            ? `
                             <div class="action-btn btn-chat">💬 Chat</div>
-                            <div class="action-btn btn-cancel" onclick="cancelBooking('${app._id}')">✕ Hủy</div>
-                        ` : app.status === 'completed' ? `
+                            <div class="action-btn btn-cancel" data-cancel-id="${app._id}">✕ Hủy</div>
+                        `
+                            : app.status === "completed"
+                              ? `
                             <div class="action-btn btn-rate">⭐ Đánh giá</div>
-                        ` : `
+                        `
+                              : `
                             <div class="action-btn btn-view">👁️ Chi tiết</div>
-                        `}
+                        `
+                        }
                     </div>
                 </div>
-            `).join('');
+            `
+                )
+                .join("");
+
+            appointmentListElem.querySelectorAll("[data-cancel-id]").forEach((btn) => {
+                btn.addEventListener("click", () => cancelBooking(btn.getAttribute("data-cancel-id")));
+            });
         }
 
         async function cancelBooking(id) {
-            if (confirm('Bạn có chắc chắn muốn hủy lịch hẹn này?')) {
-                try {
-                    await api.updateBookingStatus(id, 'cancelled');
-                    loadAppointments(); // Reload list
-                } catch (error) {
-                    alert('Lỗi khi hủy lịch hẹn.');
-                }
+            if (!id) return;
+            if (!confirm("Bạn có chắc chắn muốn hủy lịch hẹn này?")) return;
+            try {
+                await bootstrapUserId();
+                await apiPatch(`/api/bookings/${id}`, { status: "cancelled" });
+                await loadAppointments(activeFilter);
+            } catch (error) {
+                alert(error.message || "Lỗi khi hủy lịch hẹn.");
             }
         }
 
-        filterItems.forEach(item => {
-            item.addEventListener('click', function() {
-                filterItems.forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
-                
-                let status = '';
+        filterItems.forEach((item) => {
+            item.addEventListener("click", function () {
+                filterItems.forEach((i) => i.classList.remove("active"));
+                this.classList.add("active");
+
+                let status = "";
                 const text = this.innerText;
-                if (text === 'Sắp tới') status = 'confirmed';
-                else if (text === 'Đã hoàn thành') status = 'completed';
-                else if (text === 'Đã hủy') status = 'cancelled';
-                
+                if (text === "Sắp tới") status = "confirmed";
+                else if (text === "Đã hoàn thành") status = "completed";
+                else if (text === "Đã hủy") status = "cancelled";
+
+                activeFilter = status;
                 loadAppointments(status);
             });
         });
 
-        // Initial load
-        loadAppointments();
+        loadAppointments("");
     </script>
 </body>
 </html>

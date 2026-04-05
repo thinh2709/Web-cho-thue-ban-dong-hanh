@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { Booking, bookingStatuses } from "../models/Booking.js";
 import { User } from "../models/User.js";
+import { getCompanionById } from "../data/companions.js";
 
 function sanitizeBooking(doc) {
   const o = doc.toObject ? doc.toObject() : doc;
@@ -13,6 +14,9 @@ function sanitizeBooking(doc) {
     end: o.end,
     status: o.status,
     note: o.note,
+    totalPrice: o.totalPrice,
+    service: o.service,
+    staticCompanionKey: o.staticCompanionKey,
     createdAt: o.createdAt,
     updatedAt: o.updatedAt,
   };
@@ -41,7 +45,75 @@ async function ensureSampleBookings(userId) {
       status: "pending",
       note: "",
     },
+    {
+      userId,
+      companionName: "Nguyễn Thị Lan",
+      staticCompanionKey: "c1",
+      start: new Date(now.getTime() - 2 * day),
+      end: new Date(now.getTime() - 2 * day + 2 * 60 * 60 * 1000),
+      status: "completed",
+      note: "Demo doanh thu",
+      totalPrice: 1_000_000,
+      service: "Đi cafe",
+    },
   ]);
+}
+
+export async function createBooking(req, res) {
+  const userId = req.get("X-User-Id");
+  if (!userId || !mongoose.isValidObjectId(userId)) {
+    return res.status(401).json({ message: "Thiếu hoặc sai X-User-Id" });
+  }
+
+  const user = await User.findById(userId);
+  if (!user) {
+    return res.status(404).json({ message: "Không tìm thấy người dùng" });
+  }
+
+  const { companionName, start, end, note, companionId, totalPrice, service, staticCompanionKey } =
+    req.body ?? {};
+  const name =
+    typeof companionName === "string" && companionName.trim()
+      ? companionName.trim().slice(0, 120)
+      : "Bạn đồng hành";
+  const s = start ? new Date(start) : null;
+  const e = end ? new Date(end) : null;
+  if (!s || !e || Number.isNaN(s.getTime()) || Number.isNaN(e.getTime()) || e <= s) {
+    return res.status(400).json({ message: "Khung giờ không hợp lệ" });
+  }
+
+  const n = typeof note === "string" && note.length <= 2000 ? note.trim() : "";
+  const svc = typeof service === "string" ? service.trim().slice(0, 200) : "";
+
+  let staticKey =
+    typeof staticCompanionKey === "string" && staticCompanionKey.trim()
+      ? staticCompanionKey.trim().slice(0, 32)
+      : "";
+  if (!staticKey && companionId && typeof companionId === "string" && !mongoose.isValidObjectId(companionId)) {
+    if (getCompanionById(companionId)) staticKey = companionId;
+  }
+
+  const doc = {
+    userId,
+    companionName: name,
+    start: s,
+    end: e,
+    note: n,
+    status: "pending",
+  };
+  if (companionId && mongoose.isValidObjectId(companionId)) {
+    doc.companionId = companionId;
+  }
+  if (staticKey) doc.staticCompanionKey = staticKey;
+  if (svc) doc.service = svc;
+
+  const tp = totalPrice != null ? Number(totalPrice) : NaN;
+  if (Number.isFinite(tp) && tp >= 0) {
+    doc.totalPrice = Math.round(tp);
+  }
+
+  const booking = await Booking.create(doc);
+  return res.status(201).json(sanitizeBooking(booking));
 }
 
 export async function getMyBookings(req, res) {
