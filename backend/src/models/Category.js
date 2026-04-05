@@ -1,9 +1,3 @@
-import mongoose from 'mongoose';
+import { Category } from "../db/memoryEngine.js";
 
-const categorySchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  description: { type: String },
-  icon: { type: String },
-}, { timestamps: true });
-
-export default mongoose.model('Category', categorySchema);
+export default Category;

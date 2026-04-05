@@ -3,37 +3,10 @@
 # Nhánh mặc định của repo thường còn có tag latest — đổi :develop thành :latest nếu cần.
 
 services:
-  mongo:
-    image: mongo:7
-    restart: unless-stopped
-    networks:
-      - thue-net
-    volumes:
-      - mongo_data:/data/db
-    healthcheck:
-      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
-
   app:
     image: thinh2709/web-cho-thue-ban-dong-hanh:develop
     restart: unless-stopped
-    networks:
-      - thue-net
     ports:
       - "3001:3001"
     environment:
       PORT: "3001"
-      MONGODB_URI: mongodb://mongo:27017/thue-ban-dong-hanh
-    depends_on:
-      mongo:
-        condition: service_healthy
-
-volumes:
-  mongo_data:
-
-networks:
-  thue-net:
-    driver: bridge

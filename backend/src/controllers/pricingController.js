@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import { isValidObjectId } from '../db/memoryEngine.js';
 import Pricing from '../models/Pricing.js';
 
 function parseNumber(value) {
@@ -52,7 +52,7 @@ export async function createPricing(req, res) {
 export async function updatePricing(req, res) {
   try {
     const { id } = req.params;
-    if (!mongoose.isValidObjectId(id)) {
+    if (!isValidObjectId(id)) {
       return res.status(400).json({ message: 'id không hợp lệ' });
     }
     const patch = {};
@@ -98,7 +98,7 @@ export async function updatePricing(req, res) {
 export async function deletePricing(req, res) {
   try {
     const { id } = req.params;
-    if (!mongoose.isValidObjectId(id)) {
+    if (!isValidObjectId(id)) {
       return res.status(400).json({ message: 'id không hợp lệ' });
     }
     const removed = await Pricing.findByIdAndDelete(id);

@@ -1,36 +1,8 @@
-
 services:
-  mongo:
-    image: mongo:7
-    restart: unless-stopped
-    networks:
-      - thue-net
-    volumes:
-      - mongo_data:/data/db
-    healthcheck:
-      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
-
   app:
     build: .
     restart: unless-stopped
-    networks:
-      - thue-net
     ports:
       - "3001:3001"
     environment:
       PORT: "3001"
-      MONGODB_URI: mongodb://mongo:27017/thue-ban-dong-hanh
-    depends_on:
-      mongo:
-        condition: service_healthy
-
-volumes:
-  mongo_data:
-
-networks:
-  thue-net:
-    driver: bridge

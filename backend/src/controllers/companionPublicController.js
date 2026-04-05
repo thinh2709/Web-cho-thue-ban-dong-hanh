@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import { isValidObjectId } from "../db/memoryEngine.js";
 import { User } from "../models/User.js";
 import { Booking } from "../models/Booking.js";
 import { bookingRevenue } from "../utils/bookingMoney.js";
@@ -22,7 +22,7 @@ function toProfileDoc(user) {
 
 export async function getCompanionMe(req, res) {
   const userId = req.get("X-User-Id");
-  if (userId && mongoose.isValidObjectId(userId)) {
+  if (userId && isValidObjectId(userId)) {
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "Không tìm thấy người dùng" });
     return res.json({ data: toProfileDoc(user) });
@@ -37,7 +37,7 @@ export async function getCompanionMe(req, res) {
 
 export async function patchCompanionMe(req, res) {
   const userId = req.get("X-User-Id");
-  if (!userId || !mongoose.isValidObjectId(userId)) {
+  if (!userId || !isValidObjectId(userId)) {
     return res.status(401).json({ message: "Thiếu X-User-Id (đăng nhập tạm)" });
   }
 
@@ -98,7 +98,7 @@ function escapeRegex(s) {
  */
 export async function getCompanionEarnings(req, res) {
   const userId = req.get("X-User-Id");
-  if (!userId || !mongoose.isValidObjectId(userId)) {
+  if (!userId || !isValidObjectId(userId)) {
     return res.status(401).json({ message: "Thiếu hoặc sai X-User-Id" });
   }
 

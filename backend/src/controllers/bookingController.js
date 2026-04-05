@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import { isValidObjectId } from "../db/memoryEngine.js";
 import { Booking, bookingStatuses } from "../models/Booking.js";
 import { User } from "../models/User.js";
 import { getCompanionById } from "../data/companions.js";
@@ -61,7 +61,7 @@ async function ensureSampleBookings(userId) {
 
 export async function createBooking(req, res) {
   const userId = req.get("X-User-Id");
-  if (!userId || !mongoose.isValidObjectId(userId)) {
+  if (!userId || !isValidObjectId(userId)) {
     return res.status(401).json({ message: "Thiếu hoặc sai X-User-Id" });
   }
 
@@ -89,7 +89,7 @@ export async function createBooking(req, res) {
     typeof staticCompanionKey === "string" && staticCompanionKey.trim()
       ? staticCompanionKey.trim().slice(0, 32)
       : "";
-  if (!staticKey && companionId && typeof companionId === "string" && !mongoose.isValidObjectId(companionId)) {
+  if (!staticKey && companionId && typeof companionId === "string" && !isValidObjectId(companionId)) {
     if (getCompanionById(companionId)) staticKey = companionId;
   }
 
@@ -101,7 +101,7 @@ export async function createBooking(req, res) {
     note: n,
     status: "pending",
   };
-  if (companionId && mongoose.isValidObjectId(companionId)) {
+  if (companionId && isValidObjectId(companionId)) {
     doc.companionId = companionId;
   }
   if (staticKey) doc.staticCompanionKey = staticKey;
@@ -118,7 +118,7 @@ export async function createBooking(req, res) {
 
 export async function getMyBookings(req, res) {
   const userId = req.get("X-User-Id");
-  if (!userId || !mongoose.isValidObjectId(userId)) {
+  if (!userId || !isValidObjectId(userId)) {
     return res.status(401).json({ message: "Thiếu hoặc sai X-User-Id" });
   }
 
@@ -137,12 +137,12 @@ export async function getMyBookings(req, res) {
 
 export async function patchBooking(req, res) {
   const userId = req.get("X-User-Id");
-  if (!userId || !mongoose.isValidObjectId(userId)) {
+  if (!userId || !isValidObjectId(userId)) {
     return res.status(401).json({ message: "Thiếu hoặc sai X-User-Id" });
   }
 
   const { id } = req.params;
-  if (!mongoose.isValidObjectId(id)) {
+  if (!isValidObjectId(id)) {
     return res.status(400).json({ message: "Id booking không hợp lệ" });
   }
 
